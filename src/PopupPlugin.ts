@@ -1,14 +1,15 @@
 import { App, LeaferEvent, PointerEvent } from '@leafer-ui/core'
 import type { IEventListenerId, ILeaf, ILeafer } from '@leafer-ui/interface'
 import { IUserConfig } from './interface'
-
+import { Popup } from './Popup'
+import { getPopupId } from './utils'
 export class PopupPlugin {
   /**
    * @param instance 实例
    * @private
    */
   private readonly instance: ILeafer | App
-  private aimLeafer: ILeafer | App
+  private aimLeafer: ILeafer
   /**
    * @param config 用户配置
    * @private
@@ -78,7 +79,11 @@ export class PopupPlugin {
    */
   private handlePointMove(event: PointerEvent) {
     const target = event.target
+    // console.log(event)
 
+    if (target.tag === 'Popup' || target.parent?.tag === 'Popup') {
+      return
+    }
     if (!target || target.isLeafer) {
       this.hidePopup()
       return
@@ -89,8 +94,8 @@ export class PopupPlugin {
       this.hidePopup()
       return
     }
-    console.log(target.name)
     this.currentTarget = target
+    this.handlePopup(event)
   }
 
   /**
@@ -130,8 +135,20 @@ export class PopupPlugin {
   /**
    * @description 创建popup
    */
-  private createPopup() {
-    // return this.aimLeafer.add(new Popup())
+  private handlePopup(event: PointerEvent) {
+    const target = event.target
+    // console.log(event)
+
+    const id = getPopupId(target)
+    const popup = this.aimLeafer.findOne(`#${id}`) as Popup
+    if (popup) {
+      //该元素已存在
+      popup.createShapes({ x: event.x, y: event.y })
+    } else {
+      this.aimLeafer.add(
+        new Popup({ fill: 'blue', id, pointerPos: { x: event.x, y: event.y } })
+      )
+    }
   }
 }
 
