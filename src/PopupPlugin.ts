@@ -3,6 +3,7 @@ import type { IEventListenerId, ILeaf, ILeafer } from '@leafer-ui/interface'
 import { IUserConfig } from './interface'
 import { Popup } from './Popup'
 import { getPopupId } from './utils'
+import { defaultConfig } from './defaultConfig'
 export class PopupPlugin {
   /**
    * @param instance 实例
@@ -27,9 +28,9 @@ export class PopupPlugin {
    */
   private readonly bindEventIds: Array<IEventListenerId>
 
-  constructor(instance: ILeafer | App, config: IUserConfig) {
+  constructor(instance: ILeafer | App, config?: IUserConfig) {
     this.instance = instance
-    this.config = config
+    this.config = Object.assign({}, defaultConfig, config)
     this.bindEventIds = []
     this.initState()
     this.initEvent()
@@ -162,7 +163,12 @@ export class PopupPlugin {
       popup.createShapes({ x: event.x, y: event.y })
     } else {
       this.aimLeafer.add(
-        new Popup({ fill: 'blue', id, pointerPos: { x: event.x, y: event.y },target })
+        new Popup({
+          fill: 'blue',
+          id,
+          pointerPos: { x: event.x, y: event.y },
+          target,
+        })
       )
     }
   }
