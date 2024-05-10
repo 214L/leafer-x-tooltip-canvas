@@ -2,9 +2,10 @@ import { Leafer, App, Rect } from 'leafer-ui'
 
 import { PopupPlugin } from './src' // 引入插件代码
 
-const leafer = new Leafer({ view: window })
+const app = new App({ view: window, tree: {} })
 
-const rect = new Rect({
+const rect1 = new Rect({
+  name: 'rect1',
   x: 100,
   y: 100,
   width: 100,
@@ -13,6 +14,7 @@ const rect = new Rect({
   draggable: true,
 })
 const rect2 = new Rect({
+  name: 'rect2',
   x: 300,
   y: 100,
   width: 100,
@@ -23,6 +25,7 @@ const rect2 = new Rect({
 })
 
 const rect3 = new Rect({
+  name: 'rect3',
   x: 500,
   y: 100,
   width: 100,
@@ -32,12 +35,12 @@ const rect3 = new Rect({
   draggable: true,
 })
 
-leafer.add(rect)
-leafer.add(rect2)
-leafer.add(rect3)
+app.tree.add(rect1)
+app.tree.add(rect2)
+app.tree.add(rect3)
 
-new PopupPlugin(leafer, {
+new PopupPlugin(app, {
   includesType: ['Rect'],
   excludesType: ['Rect'],
 })
-console.log(leafer)
+console.log(app)
