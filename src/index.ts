@@ -1,1 +1,1 @@
-export { PopupPlugin, SelectEvent } from './Popup'
+export { PopupPlugin, SelectEvent } from './PopupPlugin'
