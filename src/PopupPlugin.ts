@@ -78,16 +78,28 @@ export class PopupPlugin {
    * @private
    */
   private handlePointMove(event: PointerEvent) {
-    const target = event.target
-    // console.log(event)
+    const result = this.instance.pick(
+      { x: event.x, y: event.y },
+      {
+        ignoreHittable: true,
+        through: true,
+      }
+    )
+    const ignoreTag = ['Popup', 'Leafer', 'App']
 
-    if (target.tag === 'Popup' || target.parent?.tag === 'Popup') {
-      return
-    }
-    if (!target || target.isLeafer) {
+    const pureResult = result.path.list.filter((item) => {
+      if (ignoreTag.includes(item?.tag) || item?.parent?.tag === 'Popup') {
+        return false
+      }
+      return true
+    })
+    const target = pureResult[0]
+
+    if (!target) {
       this.hidePopup()
       return
     }
+    console.log(Date.now(), target)
     const isAllowed = this.handleAllowed(target)
 
     if (!isAllowed) {
@@ -95,7 +107,7 @@ export class PopupPlugin {
       return
     }
     this.currentTarget = target
-    this.handlePopup(event)
+    this.handlePopup(event, target)
   }
 
   /**
@@ -123,7 +135,14 @@ export class PopupPlugin {
   /**
    * @description 隐藏 popup
    */
-  private hidePopup() {}
+  private hidePopup() {
+    const list = this.aimLeafer.find('Popup') as Popup[]
+    if (list) {
+      list.forEach((item) => {
+        item.clear()
+      })
+    }
+  }
 
   /**
    * @description 获取已经创建的popup
@@ -135,10 +154,7 @@ export class PopupPlugin {
   /**
    * @description 创建popup
    */
-  private handlePopup(event: PointerEvent) {
-    const target = event.target
-    // console.log(event)
-
+  private handlePopup(event: PointerEvent, target: ILeaf) {
     const id = getPopupId(target)
     const popup = this.aimLeafer.findOne(`#${id}`) as Popup
     if (popup) {
@@ -146,7 +162,7 @@ export class PopupPlugin {
       popup.createShapes({ x: event.x, y: event.y })
     } else {
       this.aimLeafer.add(
-        new Popup({ fill: 'blue', id, pointerPos: { x: event.x, y: event.y } })
+        new Popup({ fill: 'blue', id, pointerPos: { x: event.x, y: event.y },target })
       )
     }
   }

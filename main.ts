@@ -1,4 +1,4 @@
-import { Leafer, App, Rect } from 'leafer-ui'
+import { App, Ellipse, Rect } from 'leafer-ui'
 
 import { PopupPlugin } from './src' // 引入插件代码
 
@@ -13,14 +13,14 @@ const rect1 = new Rect({
   fill: '#32cd79',
   draggable: true,
 })
-const rect2 = new Rect({
-  name: 'rect2',
-  x: 300,
-  y: 100,
+const rect2 = new Ellipse({
+  name: 'ellipse',
+  x: 250,
+  y: 250,
   width: 100,
   height: 100,
   className: 'classNameString',
-  fill: '#32cd79',
+  fill: '#12cd79',
   draggable: true,
 })
 
