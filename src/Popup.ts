@@ -1,32 +1,31 @@
-import { IPenInputData, IPenData, IPen } from '@leafer-ui/interface'
+import { IPenInputData, IPenData, IPen, ILeaf } from '@leafer-ui/interface'
 import {
   registerUI,
   dataProcessor,
   Pen,
   PenData,
-  boundsType,
+  Text,
   dataType,
 } from 'leafer-ui'
 
 interface IPopup extends IPen {
+  target?: ILeaf
   createShapes(): void
 }
 
 export interface IPopupInputData extends IPenInputData {
+  target?: ILeaf
   pointerPos?: { x: number; y: number }
 }
 
 export interface IPopupData extends IPenData {
+  target?: ILeaf
   pointerPos?: { x: number; y: number }
 }
 
 export class PopupData extends PenData implements IPopupData {
-  protected _size: number
-
-  protected setSize(value: number): void {
-    this._size = value
-    ;(this.__leaf as Popup).createShapes()
-  }
+  target?: ILeaf
+  pointerPos?: { x: number; y: number }
 }
 
 @registerUI()
@@ -41,8 +40,11 @@ export class Popup extends Pen implements IPopup {
   @dataType({ x: 0, y: 0 })
   public declare pointerPos?: { x: number; y: number }
 
+  @dataType()
+  public declare target?: ILeaf
   constructor(data: IPopupInputData) {
     super(data)
+    this.target = data.target
     this.createShapes()
   }
 
@@ -54,5 +56,13 @@ export class Popup extends Pen implements IPopup {
       stroke: 'black',
     })
     this.roundRect(pos.x, pos.y, 80, 40, 10)
+    this.add(
+      new Text({
+        x: pos.x + 25,
+        y: pos.y + 10,
+        fill: 'black',
+        text: this.target.name,
+      })
+    )
   }
 }
