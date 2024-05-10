@@ -39,8 +39,5 @@ app.tree.add(rect1)
 app.tree.add(rect2)
 app.tree.add(rect3)
 
-new PopupPlugin(app, {
-  includesType: ['Rect'],
-  excludesType: ['Rect'],
-})
+new PopupPlugin(app)
 console.log(app)
