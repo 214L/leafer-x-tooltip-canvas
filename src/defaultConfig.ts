@@ -6,7 +6,7 @@ export const defaultConfig: IUserConfig = {
   arrow: false,
   hideDelay: 0,
   placement: 'right-end',
-  offset: [0, 0],
+  offset: [5, 5],
   preventOverflow: false,
   includesType: [],
   excludesType: [],
