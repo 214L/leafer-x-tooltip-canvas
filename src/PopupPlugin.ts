@@ -9,7 +9,7 @@ export class PopupPlugin {
    * @param instance 实例
    * @private
    */
-  private readonly instance: ILeafer | App
+  private instance: ILeafer | App
   private aimLeafer: ILeafer
   /**
    * @param config 用户配置
@@ -18,17 +18,10 @@ export class PopupPlugin {
   private readonly config: IUserConfig
 
   /**
-   * @param currentTarget - 鼠标移动到的节点
-   * @private
-   */
-  private currentTarget: ILeaf
-  /**
    * @param bindEventIds - 绑定的事件 id
    * @private
    */
   private readonly pointEventId: IEventListenerId
-
-  private popupsMap: { [key: string]: string }
 
   constructor(instance: ILeafer | App, config?: IUserConfig) {
     this.instance = instance
@@ -81,14 +74,20 @@ export class PopupPlugin {
         through: true,
       }
     )
-    const ignoreTag = ['Popup', 'Leafer', 'App']
-    const pureResult = result.path.list.filter((item) => {
-      if (ignoreTag.includes(item?.tag) || item?.parent?.tag === 'Popup') {
+
+    const ignoreTag = ['Leafer', 'App']
+    const pureResult = result.throughPath.list.filter((item) => {
+      if (
+        ignoreTag.includes(item?.tag) ||
+        item?.parent?.tag === 'Popup' ||
+        item?.className === 'leafer-x-popup'
+      ) {
         return false
       }
       return true
     })
-    const target = pureResult[0]
+    let target = pureResult[0]
+
     if (!target) {
       this.hidePopup()
       return
@@ -98,7 +97,6 @@ export class PopupPlugin {
       this.hidePopup()
       return
     }
-    this.currentTarget = target
     this.handlePopup(event, target)
   }
 
@@ -130,13 +128,15 @@ export class PopupPlugin {
    * @description 隐藏 popup
    */
   private hidePopup() {
-    const list = this.aimLeafer.find('Popup') as Popup[]
+    let list = this.aimLeafer.find('Popup') as Popup[]
     if (list) {
       list.forEach((item) => {
         item.hide()
         item.parent.remove(item)
+        item = null
       })
     }
+    list = null
   }
 
   /**
@@ -144,7 +144,7 @@ export class PopupPlugin {
    */
   private handlePopup(event: PointerEvent, target: ILeaf) {
     const id = getPopupId(target)
-    const popup = this.aimLeafer.findOne(`#${id}`) as Popup
+    let popup = this.aimLeafer.findOne(`#${id}`) as Popup
     if (popup) {
       popup.update({ x: event.x, y: event.y })
     } else {
@@ -159,12 +159,22 @@ export class PopupPlugin {
         })
       )
     }
+    popup = null
   }
 
   /**
    * @description 销毁
    */
   public destroy() {
+    const list = this.aimLeafer.find('Popup') as Popup[]
+    if (list) {
+      list.forEach((item) => {
+        item.destroy()
+        item.parent.remove(item)
+      })
+    }
+    this.instance = null
+    this.aimLeafer = null
     this.instance.off_(this.pointEventId)
   }
 }

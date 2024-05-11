@@ -17,7 +17,7 @@ interface IPopup extends IPen {
   hideDelay?: number
   createShapes(): void
   show(): void
-  hide(): void
+  hide(immediate?: boolean): void
   update(pos: { x: number; y: number }): void
 }
 
@@ -44,7 +44,7 @@ export class Popup extends Pen implements IPopup {
   public get __tag() {
     return 'Popup'
   }
-
+  public className: 'leafer-x-popup'
   @dataProcessor(PopupData)
   public declare __: IPopupData
 
@@ -85,6 +85,7 @@ export class Popup extends Pen implements IPopup {
     this.roundRect(pos.x, pos.y, 80, 40, 10)
     this.add(
       new Text({
+        className: 'leafer-x-popup',
         x: pos.x + 25,
         y: pos.y + 10,
         fill: 'black',
@@ -103,16 +104,24 @@ export class Popup extends Pen implements IPopup {
     }, this.showDelay)
   }
 
-  public hide() {
-    //开始隐藏流程
-    this.hideTimerId = setTimeout(() => {
+  public hide(immediate = false) {
+    if (immediate) {
       clearTimeout(this.showTimerId)
       this.showTimerId = null
       clearTimeout(this.hideTimerId)
       this.hideTimerId = null
       this.clear()
       this.isShow = false
-    }, this.hideDelay)
+    } else {
+      this.hideTimerId = setTimeout(() => {
+        clearTimeout(this.showTimerId)
+        this.showTimerId = null
+        clearTimeout(this.hideTimerId)
+        this.hideTimerId = null
+        this.clear()
+        this.isShow = false
+      }, this.hideDelay)
+    }
   }
 
   public update(pos: { x: number; y: number }) {
@@ -123,5 +132,8 @@ export class Popup extends Pen implements IPopup {
       this.showTimerId = null
       this.show(pos)
     }
+  }
+  public destroy() {
+    this.hide(true)
   }
 }
