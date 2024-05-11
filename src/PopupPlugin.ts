@@ -172,6 +172,13 @@ export class PopupPlugin {
     }
     console.log(this.aimLeafer.find('Popup'))
   }
+
+  /**
+   * @description 销毁
+   */
+  public destroy() {
+    this.instance.off_(this.pointEventId)
+  }
 }
 
 export class SelectEvent extends Event {}
