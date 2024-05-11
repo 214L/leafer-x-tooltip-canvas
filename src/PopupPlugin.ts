@@ -1,4 +1,4 @@
-import { App, LeaferEvent, PointerEvent } from '@leafer-ui/core'
+import { App, PointerEvent } from '@leafer-ui/core'
 import type { IEventListenerId, ILeaf, ILeafer } from '@leafer-ui/interface'
 import { IUserConfig } from './interface'
 import { Popup } from './Popup'
@@ -26,14 +26,16 @@ export class PopupPlugin {
    * @param bindEventIds - 绑定的事件 id
    * @private
    */
-  private readonly bindEventIds: Array<IEventListenerId>
+  private readonly pointEventId: IEventListenerId
+
+  private popupsMap: { [key: string]: Popup }
 
   constructor(instance: ILeafer | App, config?: IUserConfig) {
     this.instance = instance
     this.config = Object.assign({}, defaultConfig, config)
-    this.bindEventIds = []
     this.initState()
-    this.initEvent()
+    const pointEventId = this.initEvent()
+    this.pointEventId = pointEventId
   }
 
   /**
@@ -65,12 +67,7 @@ export class PopupPlugin {
       this.handlePointMove,
       this
     )
-    const viewReadyId = this.instance.on_(
-      LeaferEvent.VIEW_READY,
-      this.viewReadyEvent,
-      this
-    )
-    this.bindEventIds.push(pointEventId, viewReadyId)
+    return pointEventId
   }
 
   /**
@@ -100,7 +97,7 @@ export class PopupPlugin {
       this.hidePopup()
       return
     }
-    console.log(Date.now(), target)
+    // console.log(Date.now(), target)
     const isAllowed = this.handleAllowed(target)
 
     if (!isAllowed) {
@@ -118,20 +115,22 @@ export class PopupPlugin {
    */
   private handleAllowed(target: ILeaf) {
     const infoArr = ['#' + target.id, '.' + target.className, target.tag]
+    if (
+      this.config.includesType.length === 0 &&
+      this.config.excludesType.length === 0
+    )
+      return true
     const isInclude = infoArr.some((string) =>
       this.config.includesType.includes(string)
     )
     const isExclude = infoArr.some((string) =>
       this.config.excludesType.includes(string)
     )
+    if (!isExclude && this.config.includesType.length === 0) return true
+    if (!isInclude && this.config.excludesType.length === 0) return false
     if (isInclude || !isExclude) return true
     return false
   }
-  /**
-   * @description app view加载完成事件
-   * @private
-   */
-  private viewReadyEvent() {}
 
   /**
    * @description 隐藏 popup
@@ -171,6 +170,7 @@ export class PopupPlugin {
         })
       )
     }
+    console.log(this.aimLeafer.find('Popup'))
   }
 }
 
