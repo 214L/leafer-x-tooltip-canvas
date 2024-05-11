@@ -18,6 +18,7 @@ interface IUserConfig {
     | 'right-start'
     | 'right-end'
   offset?: [number, number]
+  info?: Array<string>
   preventOverflow?: boolean
   includesType?: Array<string>
   excludesType?: Array<string>

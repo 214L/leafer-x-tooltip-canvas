@@ -153,7 +153,7 @@ export class PopupPlugin {
           id,
           pointerPos: { x: event.x, y: event.y },
           target,
-          config:this.config
+          config: this.config,
         })
       )
     }
