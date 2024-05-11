@@ -44,7 +44,6 @@ export class PopupPlugin {
   private initState() {
     if (this.instance.isApp) {
       const app = this.instance as App
-      //app模型渲染
       if (app.sky === undefined) {
         app.sky = app.addLeafer({
           type: 'draw',
@@ -53,7 +52,6 @@ export class PopupPlugin {
       }
       this.aimLeafer = app.sky
     } else if (this.instance.isLeafer) {
-      //leafer模式渲染
       this.aimLeafer = this.instance
     }
   }
@@ -84,7 +82,6 @@ export class PopupPlugin {
       }
     )
     const ignoreTag = ['Popup', 'Leafer', 'App']
-
     const pureResult = result.path.list.filter((item) => {
       if (ignoreTag.includes(item?.tag) || item?.parent?.tag === 'Popup') {
         return false
@@ -92,14 +89,11 @@ export class PopupPlugin {
       return true
     })
     const target = pureResult[0]
-
     if (!target) {
       this.hidePopup()
       return
     }
-    // console.log(Date.now(), target)
     const isAllowed = this.handleAllowed(target)
-
     if (!isAllowed) {
       this.hidePopup()
       return
@@ -140,17 +134,11 @@ export class PopupPlugin {
     if (list) {
       list.forEach((item) => {
         item.hide()
+        item.parent.remove(item)
       })
     }
   }
 
-  /**
-   * @description 获取已经创建的popup
-   * @param id string popup id
-   */
-  private getPopup(id: string): Popup {
-    return this.aimLeafer.findOne(`#${id}`) as Popup
-  }
   /**
    * @description 创建popup
    */
@@ -158,16 +146,16 @@ export class PopupPlugin {
     const id = getPopupId(target)
     const popup = this.aimLeafer.findOne(`#${id}`) as Popup
     if (popup) {
-      //该元素已存在，更新位置
-      popup.updatePos({ x: event.x, y: event.y })
+      popup.update({ x: event.x, y: event.y })
     } else {
-      //创建新的popup
       this.aimLeafer.add(
         new Popup({
           fill: 'blue',
           id,
           pointerPos: { x: event.x, y: event.y },
           target,
+          showDelay: this.config.showDelay,
+          hideDelay: this.config.hideDelay,
         })
       )
     }

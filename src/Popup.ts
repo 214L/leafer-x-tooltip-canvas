@@ -10,21 +10,26 @@ import {
 
 interface IPopup extends IPen {
   target?: ILeaf
-  timerId?: number | NodeJS.Timeout | null
+  isShow: boolean
+  showTimerId?: number | NodeJS.Timeout | null
+  hideTimerId?: number | NodeJS.Timeout | null
+  showDelay?: number
+  hideDelay?: number
   createShapes(): void
   show(): void
   hide(): void
-  updatePos(pos: { x: number; y: number }): void
+  update(pos: { x: number; y: number }): void
 }
 
 export interface IPopupInputData extends IPenInputData {
   target?: ILeaf
+  showDelay?: number
+  hideDelay?: number
   pointerPos?: { x: number; y: number }
 }
 
 export interface IPopupData extends IPenData {
   target?: ILeaf
-  timerId?: number | NodeJS.Timeout | null
   pointerPos?: { x: number; y: number }
 }
 
@@ -47,13 +52,27 @@ export class Popup extends Pen implements IPopup {
   public declare pointerPos?: { x: number; y: number }
 
   @dataType()
-  public declare timerId?: number | NodeJS.Timeout | null
+  public declare showTimerId?: number | NodeJS.Timeout | null
+
+  @dataType()
+  public declare hideTimerId?: number | NodeJS.Timeout | null
+
+  @dataType(0)
+  public declare hideDelay?: number
+
+  @dataType(500)
+  public declare showDelay?: number
+
+  @dataType(false)
+  public declare isShow: boolean
 
   @dataType()
   public declare target?: ILeaf
+
   constructor(data: IPopupInputData) {
     super(data)
     this.target = data.target
+    this.show()
   }
 
   public createShapes(pos = this.__.pointerPos): void {
@@ -72,20 +91,37 @@ export class Popup extends Pen implements IPopup {
         text: this.target.name,
       })
     )
+    this.isShow = true
   }
 
-  public show() {
+  public show(pos = this.__.pointerPos) {
     //开始显示流程
-    this.createShapes()
+    this.showTimerId = setTimeout(() => {
+      this.createShapes(pos)
+      clearTimeout(this.showTimerId)
+      this.showTimerId = null
+    }, this.showDelay)
   }
 
   public hide() {
     //开始隐藏流程
-    console.log('in hide')
-
-    this.clear()
+    this.hideTimerId = setTimeout(() => {
+      clearTimeout(this.showTimerId)
+      this.showTimerId = null
+      clearTimeout(this.hideTimerId)
+      this.hideTimerId = null
+      this.clear()
+      this.isShow = false
+    }, this.hideDelay)
   }
-  public updatePos(pos: { x: number; y: number }) {
-    this.createShapes(pos)
+
+  public update(pos: { x: number; y: number }) {
+    if (this.isShow) {
+      this.createShapes(pos)
+    } else {
+      clearTimeout(this.showTimerId)
+      this.showTimerId = null
+      this.show(pos)
+    }
   }
 }
