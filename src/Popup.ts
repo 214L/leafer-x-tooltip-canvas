@@ -8,7 +8,7 @@ import {
   dataType,
 } from 'leafer-ui'
 import { IPos, IUserConfig } from './interface'
-import { handleStyle } from './utils'
+import { handleTextStyle } from './utils'
 
 interface IPopup extends IPen {
   target?: ILeaf
@@ -58,7 +58,7 @@ export class Popup extends Pen implements IPopup {
   @dataType(false)
   public declare isShow: boolean
   @dataType()
-  private declare config: IUserConfig
+  public declare config: IUserConfig
 
   @dataType()
   public declare target?: ILeaf
@@ -76,22 +76,21 @@ export class Popup extends Pen implements IPopup {
    */
   private createShapes(pos = this.__.pointerPos): void {
     this.clear() // 清除之前创建的路径
-    const style = handleStyle(pos, this.config)
+    const { width, height, text } = handleTextStyle(pos, this)
     this.setStyle({
       fill: 'white',
-      windingRule: 'evenodd',
       stroke: 'black',
     })
-    this.roundRect(pos.x, pos.y, 80, 40, 10)
     this.add(
       new Text({
         className: 'leafer-x-popup',
-        x: pos.x + 25,
-        y: pos.y + 10,
-        fill: 'black',
-        text: this.target.name,
+        x: pos.x,
+        y: pos.y,
+        text: text,
+        padding: 8,
       })
     )
+    this.roundRect(pos.x, pos.y, width, height, height / 8)
     this.isShow = true
   }
 
