@@ -28,7 +28,7 @@ export class PopupPlugin {
    */
   private readonly pointEventId: IEventListenerId
 
-  private popupsMap: { [key: string]: Popup }
+  private popupsMap: { [key: string]: string }
 
   constructor(instance: ILeafer | App, config?: IUserConfig) {
     this.instance = instance
@@ -139,7 +139,7 @@ export class PopupPlugin {
     const list = this.aimLeafer.find('Popup') as Popup[]
     if (list) {
       list.forEach((item) => {
-        item.clear()
+        item.hide()
       })
     }
   }
@@ -148,8 +148,8 @@ export class PopupPlugin {
    * @description 获取已经创建的popup
    * @param id string popup id
    */
-  private getPopup(id: string) {
-    return this.aimLeafer.findOne(`#${id}`)
+  private getPopup(id: string): Popup {
+    return this.aimLeafer.findOne(`#${id}`) as Popup
   }
   /**
    * @description 创建popup
@@ -158,9 +158,10 @@ export class PopupPlugin {
     const id = getPopupId(target)
     const popup = this.aimLeafer.findOne(`#${id}`) as Popup
     if (popup) {
-      //该元素已存在
-      popup.createShapes({ x: event.x, y: event.y })
+      //该元素已存在，更新位置
+      popup.updatePos({ x: event.x, y: event.y })
     } else {
+      //创建新的popup
       this.aimLeafer.add(
         new Popup({
           fill: 'blue',
@@ -170,7 +171,6 @@ export class PopupPlugin {
         })
       )
     }
-    console.log(this.aimLeafer.find('Popup'))
   }
 
   /**
@@ -180,5 +180,3 @@ export class PopupPlugin {
     this.instance.off_(this.pointEventId)
   }
 }
-
-export class SelectEvent extends Event {}

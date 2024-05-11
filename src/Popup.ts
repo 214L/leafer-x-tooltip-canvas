@@ -10,7 +10,11 @@ import {
 
 interface IPopup extends IPen {
   target?: ILeaf
+  timerId?: number | NodeJS.Timeout | null
   createShapes(): void
+  show(): void
+  hide(): void
+  updatePos(pos: { x: number; y: number }): void
 }
 
 export interface IPopupInputData extends IPenInputData {
@@ -20,11 +24,13 @@ export interface IPopupInputData extends IPenInputData {
 
 export interface IPopupData extends IPenData {
   target?: ILeaf
+  timerId?: number | NodeJS.Timeout | null
   pointerPos?: { x: number; y: number }
 }
 
 export class PopupData extends PenData implements IPopupData {
   target?: ILeaf
+  timerId?: number | NodeJS.Timeout | null
   pointerPos?: { x: number; y: number }
 }
 
@@ -41,11 +47,13 @@ export class Popup extends Pen implements IPopup {
   public declare pointerPos?: { x: number; y: number }
 
   @dataType()
+  public declare timerId?: number | NodeJS.Timeout | null
+
+  @dataType()
   public declare target?: ILeaf
   constructor(data: IPopupInputData) {
     super(data)
     this.target = data.target
-    this.createShapes()
   }
 
   public createShapes(pos = this.__.pointerPos): void {
@@ -64,5 +72,20 @@ export class Popup extends Pen implements IPopup {
         text: this.target.name,
       })
     )
+  }
+
+  public show() {
+    //开始显示流程
+    this.createShapes()
+  }
+
+  public hide() {
+    //开始隐藏流程
+    console.log('in hide')
+
+    this.clear()
+  }
+  public updatePos(pos: { x: number; y: number }) {
+    this.createShapes(pos)
   }
 }
