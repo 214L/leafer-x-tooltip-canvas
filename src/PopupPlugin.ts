@@ -150,12 +150,10 @@ export class PopupPlugin {
     } else {
       this.aimLeafer.add(
         new Popup({
-          fill: 'blue',
           id,
           pointerPos: { x: event.x, y: event.y },
           target,
-          showDelay: this.config.showDelay,
-          hideDelay: this.config.hideDelay,
+          config:this.config
         })
       )
     }

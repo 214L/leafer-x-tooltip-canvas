@@ -7,36 +7,34 @@ import {
   Text,
   dataType,
 } from 'leafer-ui'
+import { IPos, IUserConfig } from './interface'
+import { handleStyle } from './utils'
 
 interface IPopup extends IPen {
   target?: ILeaf
   isShow: boolean
   showTimerId?: number | NodeJS.Timeout | null
   hideTimerId?: number | NodeJS.Timeout | null
-  showDelay?: number
-  hideDelay?: number
-  createShapes(): void
   show(): void
   hide(immediate?: boolean): void
-  update(pos: { x: number; y: number }): void
+  update(pos: IPos): void
 }
 
 export interface IPopupInputData extends IPenInputData {
   target?: ILeaf
-  showDelay?: number
-  hideDelay?: number
-  pointerPos?: { x: number; y: number }
+  config?: IUserConfig
+  pointerPos?: IPos
 }
 
 export interface IPopupData extends IPenData {
   target?: ILeaf
-  pointerPos?: { x: number; y: number }
+  pointerPos?: IPos
 }
 
 export class PopupData extends PenData implements IPopupData {
   target?: ILeaf
   timerId?: number | NodeJS.Timeout | null
-  pointerPos?: { x: number; y: number }
+  pointerPos?: IPos
 }
 
 @registerUI()
@@ -49,7 +47,7 @@ export class Popup extends Pen implements IPopup {
   public declare __: IPopupData
 
   @dataType({ x: 0, y: 0 })
-  public declare pointerPos?: { x: number; y: number }
+  public declare pointerPos?: IPos
 
   @dataType()
   public declare showTimerId?: number | NodeJS.Timeout | null
@@ -57,14 +55,10 @@ export class Popup extends Pen implements IPopup {
   @dataType()
   public declare hideTimerId?: number | NodeJS.Timeout | null
 
-  @dataType(0)
-  public declare hideDelay?: number
-
-  @dataType(500)
-  public declare showDelay?: number
-
   @dataType(false)
   public declare isShow: boolean
+  @dataType()
+  private declare config: IUserConfig
 
   @dataType()
   public declare target?: ILeaf
@@ -72,11 +66,17 @@ export class Popup extends Pen implements IPopup {
   constructor(data: IPopupInputData) {
     super(data)
     this.target = data.target
+    this.config = data.config
     this.show()
   }
 
-  public createShapes(pos = this.__.pointerPos): void {
+  /**
+   * @description 创建popup图形
+   * @param pos 位置信息
+   */
+  private createShapes(pos = this.__.pointerPos): void {
     this.clear() // 清除之前创建的路径
+    const style = handleStyle(pos, this.config)
     this.setStyle({
       fill: 'white',
       windingRule: 'evenodd',
@@ -101,7 +101,7 @@ export class Popup extends Pen implements IPopup {
       this.createShapes(pos)
       clearTimeout(this.showTimerId)
       this.showTimerId = null
-    }, this.showDelay)
+    }, this.config.showDelay)
   }
 
   public hide(immediate = false) {
@@ -120,11 +120,11 @@ export class Popup extends Pen implements IPopup {
         this.hideTimerId = null
         this.clear()
         this.isShow = false
-      }, this.hideDelay)
+      }, this.config.hideDelay)
     }
   }
 
-  public update(pos: { x: number; y: number }) {
+  public update(pos: IPos) {
     if (this.isShow) {
       this.createShapes(pos)
     } else {
