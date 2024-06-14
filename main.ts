@@ -1,6 +1,6 @@
 import { App, Ellipse, Rect } from 'leafer-ui'
 
-import { PopupPlugin } from './src' // 引入插件代码
+import { TooltipPlugin } from './src' // 引入插件代码
 
 const app = new App({ view: window, tree: {} })
 
@@ -39,7 +39,7 @@ app.tree.add(rect1)
 app.tree.add(rect2)
 app.tree.add(rect3)
 
-new PopupPlugin(app, {
+new TooltipPlugin(app, {
   info: ['width', 'height', 'innerId'],
   includesType: ['Rect'],
   excludesType: [],

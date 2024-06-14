@@ -10,7 +10,7 @@ import {
 import { IPos, IUserConfig } from './interface'
 import { handleTextStyle } from './utils'
 
-interface IPopup extends IPen {
+interface ITooltip extends IPen {
   target?: ILeaf
   isShow: boolean
   showTimerId?: number | NodeJS.Timeout | null
@@ -20,31 +20,31 @@ interface IPopup extends IPen {
   update(pos: IPos): void
 }
 
-export interface IPopupInputData extends IPenInputData {
+export interface ITooltipInputData extends IPenInputData {
   target?: ILeaf
   config?: IUserConfig
   pointerPos?: IPos
 }
 
-export interface IPopupData extends IPenData {
+export interface ITooltipData extends IPenData {
   target?: ILeaf
   pointerPos?: IPos
 }
 
-export class PopupData extends PenData implements IPopupData {
+export class TooltipData extends PenData implements ITooltipData {
   target?: ILeaf
   timerId?: number | NodeJS.Timeout | null
   pointerPos?: IPos
 }
 
 @registerUI()
-export class Popup extends Pen implements IPopup {
+export class Tooltip extends Pen implements ITooltip {
   public get __tag() {
-    return 'Popup'
+    return 'Tooltip'
   }
-  public className: 'leafer-x-popup'
-  @dataProcessor(PopupData)
-  public declare __: IPopupData
+  public className: 'leafer-x-tooltip'
+  @dataProcessor(TooltipData)
+  public declare __: ITooltipData
 
   @dataType({ x: 0, y: 0 })
   public declare pointerPos?: IPos
@@ -63,7 +63,7 @@ export class Popup extends Pen implements IPopup {
   @dataType()
   public declare target?: ILeaf
 
-  constructor(data: IPopupInputData) {
+  constructor(data: ITooltipInputData) {
     super(data)
     this.target = data.target
     this.config = data.config
@@ -71,19 +71,19 @@ export class Popup extends Pen implements IPopup {
   }
 
   /**
-   * @description 创建popup图形
+   * @description tooltip
    * @param pos 位置信息
    */
   private createShapes(pos = this.__.pointerPos): void {
     this.clear() // 清除之前创建的路径
-    const { width, height, text } = handleTextStyle(pos, this)
+    const { width, height, text } = handleTextStyle(this)
     this.setStyle({
       fill: 'white',
       stroke: 'black',
     })
     this.add(
       new Text({
-        className: 'leafer-x-popup',
+        className: 'leafer-x-tooltip',
         x: pos.x,
         y: pos.y,
         text: text,

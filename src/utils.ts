@@ -1,18 +1,18 @@
 import { Box } from 'leafer-ui'
-import { ILeaf, ILeafData } from '@leafer-ui/interface'
-import { IPos, IUserConfig } from './interface'
-import { Popup } from './Popup'
+import { ILeaf } from '@leafer-ui/interface'
+import { IUserConfig } from './interface'
+import { Tooltip } from './Tooltip'
 /**
  * @description 获取uuid 考虑兼容性问题采用此方法
  * @param length id长度
  * @returns
  */
-export const getPopupId = function (target: ILeaf) {
+export const getTooltipId = function (target: ILeaf) {
   return target.tag + target.innerId
 }
-export const handleTextStyle = function (pos: IPos, popup?: Popup) {
-  let target = popup.target
-  let config = popup.config
+export const handleTextStyle = function (tooltip?: Tooltip) {
+  let target = tooltip.target
+  let config = tooltip.config
   const str = handleContent(target, config)
   const box = new Box({
     children: [

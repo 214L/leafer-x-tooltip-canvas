@@ -1,1 +1,1 @@
-export { PopupPlugin } from './PopupPlugin'
+export { TooltipPlugin } from './TooltipPlugin'

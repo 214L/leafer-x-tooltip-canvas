@@ -1,10 +1,10 @@
 import { App, PointerEvent } from '@leafer-ui/core'
 import type { IEventListenerId, ILeaf, ILeafer } from '@leafer-ui/interface'
 import { IUserConfig } from './interface'
-import { Popup } from './Popup'
-import { getPopupId } from './utils'
+import { Tooltip } from './Tooltip'
+import { getTooltipId } from './utils'
 import { defaultConfig } from './defaultConfig'
-export class PopupPlugin {
+export class TooltipPlugin {
   /**
    * @param instance 实例
    * @private
@@ -79,8 +79,8 @@ export class PopupPlugin {
     const pureResult = result.throughPath.list.filter((item) => {
       if (
         ignoreTag.includes(item?.tag) ||
-        item?.parent?.tag === 'Popup' ||
-        item?.className === 'leafer-x-popup'
+        item?.parent?.tag === 'Tooltip' ||
+        item?.className === 'leafer-x-tooltip'
       ) {
         return false
       }
@@ -89,15 +89,15 @@ export class PopupPlugin {
     let target = pureResult[0]
 
     if (!target) {
-      this.hidePopup()
+      this.hideTooltip()
       return
     }
     const isAllowed = this.handleAllowed(target)
     if (!isAllowed) {
-      this.hidePopup()
+      this.hideTooltip()
       return
     }
-    this.handlePopup(event, target)
+    this.handleTooltip(event, target)
   }
 
   /**
@@ -127,8 +127,8 @@ export class PopupPlugin {
   /**
    * @description 隐藏 popup
    */
-  private hidePopup() {
-    let list = this.aimLeafer.find('Popup') as Popup[]
+  private hideTooltip() {
+    let list = this.aimLeafer.find('Tooltip') as Tooltip[]
     if (list) {
       list.forEach((item) => {
         item.hide()
@@ -140,16 +140,16 @@ export class PopupPlugin {
   }
 
   /**
-   * @description 创建popup
+   * @description 创建tooltip
    */
-  private handlePopup(event: PointerEvent, target: ILeaf) {
-    const id = getPopupId(target)
-    let popup = this.aimLeafer.findOne(`#${id}`) as Popup
-    if (popup) {
-      popup.update({ x: event.x, y: event.y })
+  private handleTooltip(event: PointerEvent, target: ILeaf) {
+    const id = getTooltipId(target)
+    let tooltip = this.aimLeafer.findOne(`#${id}`) as Tooltip
+    if (tooltip) {
+      tooltip.update({ x: event.x, y: event.y })
     } else {
       this.aimLeafer.add(
-        new Popup({
+        new Tooltip({
           id,
           pointerPos: { x: event.x, y: event.y },
           target,
@@ -157,14 +157,14 @@ export class PopupPlugin {
         })
       )
     }
-    popup = null
+    tooltip = null
   }
 
   /**
    * @description 销毁
    */
   public destroy() {
-    const list = this.aimLeafer.find('Popup') as Popup[]
+    const list = this.aimLeafer.find('Tooltip') as Tooltip[]
     if (list) {
       list.forEach((item) => {
         item.destroy()
