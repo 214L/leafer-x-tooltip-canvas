@@ -1,8 +1,8 @@
-# leafer-x-popup
+# leafer-x-tooltip-canvas
 
 ## 插件简介
 
-leafer-x-popup 是 [Leafer-ui](https://leaferjs.com/ui/) 的第三方弹窗插件，用于 tooltip 功能或其他场景。
+leafer-x-tooltip-canvas 是 [Leafer-ui](https://leaferjs.com/ui/) 的第三方 tooltip 插件，用于向用户展示信息。
 
 <!-- - [在线体验（尚未完成）]() -->
 
@@ -11,7 +11,7 @@ leafer-x-popup 是 [Leafer-ui](https://leaferjs.com/ui/) 的第三方弹窗插�
 ### 安装
 
 ```node
-npm i leafer-x-popup --save
+npm i leafer-x-tooltip-canvas --save
 ```
 
 ### 使用方法
@@ -23,11 +23,32 @@ npm i leafer-x-popup --save
 > 请注意：如果传入 App 时尚未创建 sky 层，会自动创建 sky 层
 
 ```
-import { PopupPlugin } from 'leafer-x-popup';
+import { TooltipPlugin } from 'leafer-x-';
 const app = new App({ view: window })
-//new PopupPlugin时可传入第二个参数用作用户配置
-const plugin =new PopupPlugin(app)
+//new TooltipPlugin时可传入第二个参数用作用户配置
+const plugin =new TooltipPlugin(app)
 ```
+
+### todo
+
+- 显示/隐藏
+  - [x] 基本显示隐藏
+  - [x] 延迟显示隐藏
+- 样式
+  - [ ] 三角箭头
+  - [ ] 黑白主题
+  - [ ] 自定义主题
+- 位置
+  - [x] offset
+  - [x] 相对鼠标位置
+  - [ ] 相对元素位置
+  - [ ] 显示避让逻辑
+- 信息
+  - [x] 自定义信息
+- 交互
+  - [x] 包括/忽略类型功能
+  - [ ] 触发方式
+  - [ ] 虚拟触发
 
 ### 配置项
 
