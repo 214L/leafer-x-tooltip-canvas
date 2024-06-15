@@ -86,7 +86,8 @@ export class TooltipPlugin {
       }
       return true
     })
-    let target = pureResult[0]
+
+    let target = pureResult[pureResult.length - 1]
 
     if (!target) {
       this.hideTooltip()
