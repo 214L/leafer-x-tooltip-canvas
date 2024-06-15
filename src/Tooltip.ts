@@ -105,25 +105,18 @@ export class Tooltip extends Pen implements ITooltip {
 
   public hide(immediate = false) {
     if (immediate) {
-      clearTimeout(this.showTimerId)
-      this.showTimerId = null
-      clearTimeout(this.hideTimerId)
-      this.hideTimerId = null
-      this.clear()
-      this.isShow = false
+      this.destroy()
     } else {
+      if (this.hideTimerId) return
       this.hideTimerId = setTimeout(() => {
-        clearTimeout(this.showTimerId)
-        this.showTimerId = null
-        clearTimeout(this.hideTimerId)
-        this.hideTimerId = null
-        this.clear()
-        this.isShow = false
+        this.destroy()
       }, this.config.hideDelay)
     }
   }
 
   public update(pos: IPos) {
+    clearTimeout(this.hideTimerId)
+    this.hideTimerId = null
     if (this.isShow) {
       this.createShapes(pos)
     } else {
@@ -132,7 +125,21 @@ export class Tooltip extends Pen implements ITooltip {
       this.show(pos)
     }
   }
-  public destroy() {
-    this.hide(true)
+  public destroyTooltip() {
+    // 清除显示和隐藏的定时器
+    if (this.showTimerId) {
+      clearTimeout(this.showTimerId)
+      this.showTimerId = null
+    }
+
+    if (this.hideTimerId) {
+      clearTimeout(this.hideTimerId)
+      this.hideTimerId = null
+    }
+    // 清理显示的内容
+    this.destroy()
+    this.isShow = false
+    // 移除对目标元素的引用
+    this.target = undefined
   }
 }

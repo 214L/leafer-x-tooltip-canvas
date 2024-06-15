@@ -88,7 +88,6 @@ export class TooltipPlugin {
     })
 
     let target = pureResult[pureResult.length - 1]
-
     if (!target) {
       this.hideTooltip()
       return
@@ -98,6 +97,8 @@ export class TooltipPlugin {
       this.hideTooltip()
       return
     }
+
+    //处理tooltip
     this.handleTooltip(event, target)
   }
 
@@ -129,15 +130,11 @@ export class TooltipPlugin {
    * @description 隐藏 popup
    */
   private hideTooltip() {
-    let list = this.aimLeafer.find('Tooltip') as Tooltip[]
-    if (list) {
-      list.forEach((item) => {
-        item.hide()
-        item.parent.remove(item)
-        item = null
-      })
+    let tooltipList = this.aimLeafer.find('Tooltip') as Tooltip[]
+    for (let i = 0; i < tooltipList.length; i++) {
+      const element = tooltipList[i]
+      element.hide()
     }
-    list = null
   }
 
   /**
@@ -145,10 +142,21 @@ export class TooltipPlugin {
    */
   private handleTooltip(event: PointerEvent, target: ILeaf) {
     const id = getTooltipId(target)
-    let tooltip = this.aimLeafer.findOne(`#${id}`) as Tooltip
-    if (tooltip) {
-      tooltip.update({ x: event.x, y: event.y })
-    } else {
+    let tooltipList = this.aimLeafer.find('Tooltip') as Tooltip[]
+    
+    let processed = false
+    for (let i = 0; i < tooltipList.length; i++) {
+      const element = tooltipList[i]
+      if (element.id == id) {
+        //已存在
+        element.update({ x: event.x, y: event.y })
+        processed = true
+      } else if (element.id && element.id !== id) {
+        //其他元素
+        element.hide()
+      }
+    }
+    if (!processed) {
       this.aimLeafer.add(
         new Tooltip({
           id,
@@ -158,7 +166,6 @@ export class TooltipPlugin {
         })
       )
     }
-    tooltip = null
   }
 
   /**
@@ -168,7 +175,7 @@ export class TooltipPlugin {
     const list = this.aimLeafer.find('Tooltip') as Tooltip[]
     if (list) {
       list.forEach((item) => {
-        item.destroy()
+        item.destroyTooltip()
         item.parent.remove(item)
       })
     }
