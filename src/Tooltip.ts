@@ -94,39 +94,7 @@ export class Tooltip extends Pen implements ITooltip {
     this.isShow = true
   }
 
-  public show(pos = this.__.pointerPos) {
-    //开始显示流程
-    this.showTimerId = setTimeout(() => {
-      this.createShapes(pos)
-      clearTimeout(this.showTimerId)
-      this.showTimerId = null
-    }, this.config.showDelay)
-  }
-
-  public hide(immediate = false) {
-    if (immediate) {
-      this.destroy()
-    } else {
-      if (this.hideTimerId) return
-      this.hideTimerId = setTimeout(() => {
-        this.destroy()
-      }, this.config.hideDelay)
-    }
-  }
-
-  public update(pos: IPos) {
-    clearTimeout(this.hideTimerId)
-    this.hideTimerId = null
-    if (this.isShow) {
-      this.createShapes(pos)
-    } else {
-      clearTimeout(this.showTimerId)
-      this.showTimerId = null
-      this.show(pos)
-    }
-  }
-  public destroyTooltip() {
-    // 清除显示和隐藏的定时器
+  private clearShowHideTimers() {
     if (this.showTimerId) {
       clearTimeout(this.showTimerId)
       this.showTimerId = null
@@ -136,10 +104,43 @@ export class Tooltip extends Pen implements ITooltip {
       clearTimeout(this.hideTimerId)
       this.hideTimerId = null
     }
-    // 清理显示的内容
+  }
+
+  public show(pos = this.__.pointerPos) {
+    this.clearShowHideTimers()
+    this.showTimerId = setTimeout(() => {
+      this.createShapes(pos)
+      clearTimeout(this.showTimerId)
+      this.showTimerId = null
+    }, this.config.showDelay)
+  }
+
+  public hide(immediate = false) {
+    this.clearShowHideTimers()
+    if (immediate) {
+      this.destroy()
+    } else {
+      if (!this.hideTimerId) {
+        this.hideTimerId = setTimeout(() => {
+          this.destroy()
+        }, this.config.hideDelay)
+      }
+    }
+  }
+
+  public update(pos: IPos) {
+    this.clearShowHideTimers()
+    if (this.isShow) {
+      this.createShapes(pos)
+    } else {
+      this.show(pos)
+    }
+  }
+
+  public destroyTooltip() {
+    this.clearShowHideTimers()
     this.destroy()
     this.isShow = false
-    // 移除对目标元素的引用
     this.target = undefined
   }
 }

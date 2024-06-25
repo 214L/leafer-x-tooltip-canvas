@@ -1,9 +1,15 @@
 import { App, PointerEvent } from '@leafer-ui/core'
-import type { IEventListenerId, ILeaf, ILeafer } from '@leafer-ui/interface'
+import type {
+  IEventListenerId,
+  ILeaf,
+  ILeafer,
+  IUI,
+} from '@leafer-ui/interface'
 import { IUserConfig } from './interface'
 import { Tooltip } from './Tooltip'
 import { getTooltipId } from './utils'
 import { defaultConfig } from './defaultConfig'
+
 export class TooltipPlugin {
   /**
    * @param instance 实例
@@ -27,8 +33,7 @@ export class TooltipPlugin {
     this.instance = instance
     this.config = Object.assign({}, defaultConfig, config)
     this.initState()
-    const pointEventId = this.initEvent()
-    this.pointEventId = pointEventId
+    this.pointEventId = this.initEvent()
   }
 
   /**
@@ -48,17 +53,13 @@ export class TooltipPlugin {
       this.aimLeafer = this.instance
     }
   }
+
   /**
    * @description 初始化事件处理
    * @private
    */
   private initEvent() {
-    const pointEventId = this.instance.on_(
-      PointerEvent.MOVE,
-      this.handlePointMove,
-      this
-    )
-    return pointEventId
+    return this.instance.on_(PointerEvent.MOVE, this.handlePointMove, this)
   }
 
   /**
@@ -75,8 +76,23 @@ export class TooltipPlugin {
       }
     )
 
+    const target = this.filterTarget(result.throughPath.list)
+    if (!target) {
+      this.hideTooltip()
+      return
+    }
+
+    if (!this.handleAllowed(target)) {
+      this.hideTooltip()
+      return
+    }
+
+    this.handleTooltip(event, target)
+  }
+
+  private filterTarget(list: ILeaf[]): ILeaf | null {
     const ignoreTag = ['Leafer', 'App']
-    const pureResult = result.throughPath.list.filter((item) => {
+    const pureResult = list.filter((item) => {
       if (
         ignoreTag.includes(item?.tag) ||
         item?.parent?.tag === 'Tooltip' ||
@@ -87,19 +103,7 @@ export class TooltipPlugin {
       return true
     })
 
-    let target = pureResult[pureResult.length - 1]
-    if (!target) {
-      this.hideTooltip()
-      return
-    }
-    const isAllowed = this.handleAllowed(target)
-    if (!isAllowed) {
-      this.hideTooltip()
-      return
-    }
-
-    //处理tooltip
-    this.handleTooltip(event, target)
+    return pureResult[pureResult.length - 1] || null
   }
 
   /**
@@ -109,53 +113,45 @@ export class TooltipPlugin {
    */
   private handleAllowed(target: ILeaf) {
     const infoArr = ['#' + target.id, '.' + target.className, target.tag]
-    if (
-      this.config.includesType.length === 0 &&
-      this.config.excludesType.length === 0
-    )
-      return true
-    const isInclude = infoArr.some((string) =>
-      this.config.includesType.includes(string)
-    )
-    const isExclude = infoArr.some((string) =>
-      this.config.excludesType.includes(string)
-    )
-    if (!isExclude && this.config.includesType.length === 0) return true
-    if (!isInclude && this.config.excludesType.length === 0) return false
-    if (isInclude || !isExclude) return true
-    return false
+    const { includesType, excludesType } = this.config
+
+    if (includesType.length === 0 && excludesType.length === 0) return true
+
+    const isInclude = infoArr.some((string) => includesType.includes(string))
+    const isExclude = infoArr.some((string) => excludesType.includes(string))
+
+    if (!isExclude && includesType.length === 0) return true
+    if (!isInclude && excludesType.length === 0) return false
+    return isInclude || !isExclude
   }
 
   /**
-   * @description 隐藏 popup
+   * @description 隐藏 tooltip
    */
   private hideTooltip() {
-    let tooltipList = this.aimLeafer.find('Tooltip') as Tooltip[]
-    for (let i = 0; i < tooltipList.length; i++) {
-      const element = tooltipList[i]
-      element.hide()
-    }
+    const tooltipList = this.aimLeafer.find('Tooltip') as Tooltip[]
+    tooltipList.forEach((tooltip: Tooltip) => {
+      tooltip.hide()
+    })
   }
 
   /**
-   * @description 创建tooltip
+   * @description 创建或更新 tooltip
    */
   private handleTooltip(event: PointerEvent, target: ILeaf) {
     const id = getTooltipId(target)
-    let tooltipList = this.aimLeafer.find('Tooltip') as Tooltip[]
-    
+    const tooltipList = this.aimLeafer.find('Tooltip') as Tooltip[]
+
     let processed = false
-    for (let i = 0; i < tooltipList.length; i++) {
-      const element = tooltipList[i]
-      if (element.id == id) {
-        //已存在
-        element.update({ x: event.x, y: event.y })
+    for (const tooltip of tooltipList) {
+      if (tooltip.id === id) {
+        tooltip.update({ x: event.x, y: event.y })
         processed = true
-      } else if (element.id && element.id !== id) {
-        //其他元素
-        element.hide()
+      } else {
+        tooltip.hide()
       }
     }
+
     if (!processed) {
       this.aimLeafer.add(
         new Tooltip({
@@ -172,15 +168,15 @@ export class TooltipPlugin {
    * @description 销毁
    */
   public destroy() {
-    const list = this.aimLeafer.find('Tooltip') as Tooltip[]
-    if (list) {
-      list.forEach((item) => {
-        item.destroyTooltip()
-        item.parent.remove(item)
+    const tooltipList = this.aimLeafer.find('Tooltip') as Tooltip[]
+    if (tooltipList) {
+      tooltipList.forEach((tooltip) => {
+        tooltip.destroyTooltip()
+        tooltip.parent.remove(tooltip)
       })
     }
+    this.instance.off_(this.pointEventId)
     this.instance = null
     this.aimLeafer = null
-    this.instance.off_(this.pointEventId)
   }
 }
