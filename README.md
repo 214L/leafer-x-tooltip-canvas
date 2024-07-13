@@ -25,7 +25,6 @@ npm i leafer-x-tooltip-canvas --save
 ```js
 import { TooltipPlugin } from 'leafer-x-'
 const app = new App({ view: window })
-//new TooltipPlugin时可传入第二个参数用作用户配置
 const plugin = new TooltipPlugin(app)
 ```
 
@@ -89,18 +88,3 @@ IStyle 属性
 
 
   [Github](https://github.com/214L/leafer-x-popup-canvas)
-
-<style>
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  th, td {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-  }
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-</style>
