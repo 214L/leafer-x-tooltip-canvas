@@ -14,12 +14,16 @@ export const handleTextStyle = function (tooltip?: Tooltip) {
   let target = tooltip.target
   let config = tooltip.config
   const str = handleContent(target, config)
+  const {fontSize,fontFamily,fontWeight,padding} = config.style
   const box = new Box({
     children: [
       {
         tag: 'Text',
         text: str,
-        padding: 8,
+        fontSize,
+        fontFamily,
+        fontWeight,
+        padding,
       },
     ],
   })

@@ -77,20 +77,25 @@ export class Tooltip extends Pen implements ITooltip {
   private createShapes(pos = this.__.pointerPos): void {
     this.clear() // 清除之前创建的路径
     const { width, height, text } = handleTextStyle(this)
+    const { backgroundColor,stroke,color, padding, borderRadius,fontSize ,fontWeight,fontFamily} = this.config.style
     this.setStyle({
-      fill: 'white',
-      stroke: 'black',
+      fill: backgroundColor,
+      stroke,
     })
     this.add(
       new Text({
         className: 'leafer-x-tooltip',
+        fill: color,
+        fontSize,
+        fontWeight,
+        fontFamily,
         x: pos.x,
         y: pos.y,
         text: text,
-        padding: 8,
+        padding,
       })
     )
-    this.roundRect(pos.x, pos.y, width, height, height / 8)
+    this.roundRect(pos.x, pos.y, width, height, borderRadius)
     this.isShow = true
   }
 
