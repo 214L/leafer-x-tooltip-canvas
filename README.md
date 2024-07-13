@@ -16,13 +16,13 @@ npm i leafer-x-tooltip-canvas --save
 
 ### 使用方法
 
-使用插件时，创建一个插件实例，并传入 App 或者 Leafer 实例。（推荐使用 App）
+使用插件时，创建一个插件实例，并传入 `App` 或者 `Leafer` 实例。（推荐使用`App`）
 
-如果传入的是 App,会在 sky 层中绘制弹窗，如果传入的是 Leafer，会在 leafer 层中绘制弹窗。
+如果传入的是 `App`,会在`sky`层中绘制弹窗，如果传入的是 `Leafer`，会在传入的`Leafer`层中绘制弹窗。
 
-> 请注意：如果传入 App 时尚未创建 sky 层，会自动创建 sky 层
+> 请注意：如果传入`App`时尚未创建`sky`层，会自动创建`sky`层
 
-```
+```js
 import { TooltipPlugin } from 'leafer-x-';
 const app = new App({ view: window })
 //new TooltipPlugin时可传入第二个参数用作用户配置

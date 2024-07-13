@@ -3,7 +3,6 @@ import type {
   IEventListenerId,
   ILeaf,
   ILeafer,
-  IUI,
 } from '@leafer-ui/interface'
 import { IUserConfig } from './interface'
 import { Tooltip } from './Tooltip'

@@ -1,6 +1,5 @@
 interface IUserConfig {
   reference?: 'pointer' | 'element'
-  effect?: 'dark' | 'light'
   showDelay?: number
   arrow?: boolean
   hideDelay?: number
@@ -22,5 +21,17 @@ interface IUserConfig {
   preventOverflow?: boolean
   includesType?: Array<string>
   excludesType?: Array<string>
+  theme?: 'light' | 'dark'
+  style?:IStyleConfig
+}
+interface IStyleConfig{
+  backgroundColor:"",
+  color:"",
+  borderRadius:"",
+  padding:"",
+  fontSize:"",
+  fontWeight:"",
+  fontFamily:"",
+  boxShadow:"",
 }
 export type { IUserConfig }
