@@ -86,10 +86,10 @@ IStyle 属性
   - [x] 包括/忽略类型功能
   - [ ] 触发方式
   - [ ] 虚拟触发
-        [Github](https://github.com/214L)
 
-<!-- [更新日志]() -->
-<!-- [掘金]() -->
+
+  [Github](https://github.com/214L/leafer-x-popup-canvas)
+
 <style>
   table {
     width: 100%;
