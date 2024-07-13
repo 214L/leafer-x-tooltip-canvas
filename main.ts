@@ -38,7 +38,6 @@ const rect3 = new Rect({
 app.tree.add(rect1)
 app.tree.add(rect2)
 app.tree.add(rect3)
-
 new TooltipPlugin(app, {
   info: ['width', 'height', 'innerId'],
   includesType: ['Rect'],

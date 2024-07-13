@@ -51,8 +51,55 @@ const plugin =new TooltipPlugin(app)
   - [ ] 虚拟触发
 
 ### 配置项
+配置项可在创建tooltipPlugin实例时作为第二个参数传入
+```js
+new TooltipPlugin(app, {
+  info: ['width', 'height', 'innerId'],
+  includesType: ['Rect'],
+  excludesType: [],
+  ...
+})
+```
+具体配置项如下
+|字段|类型|默认值|说明|
+|:-:|:-:|:-:|:-:|
+|info|Array\<string>|['tag']|展示的属性字段|
+|showDelay|number|500|延迟显示的时间|
+|hideDelay|number|0|延迟隐藏的时间|
+|includesType|Array\<string>|[]|需要显示tooltip的元素，传入元素的tag|
+|excludesType|Array\<string>|[]|不需要显示tooltip的元素，传入元素的tag|
+|offset|Array\<number>|[5, 5]|tooltip相对于鼠标位置的偏移量|
+|theme|string|'light'|主题，可选值：'light'、'dark'|
+|style|IStyle|见下表|tooltip的样式配置|
+
+IStyle属性
+|字段|类型|默认值|说明|
+|:-:|:-:|:-:|:-:|
+|backgroundColor|string|"white"|tooltip的背景颜色|
+|stroke|string|"black"|tooltip框线颜色|
+|color|string|"black"|tooltip文本颜色|
+|borderRadius|number|8|tooltip框线圆角|
+|padding|number|8|tooltip内边距|
+|fontSize|number|14|tooltip文本大小|
+|fontWeight|number|400|tooltip文本粗细|
+|fontFamily|string|"Punctuation SC"|tooltip文本字体,同css多个字体用逗号隔开|
+
 
 [Github](https://github.com/214L)
 
 <!-- [更新日志]() -->
 <!-- [掘金]() -->
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+</style>
