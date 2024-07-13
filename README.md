@@ -23,11 +23,48 @@ npm i leafer-x-tooltip-canvas --save
 > 请注意：如果传入`App`时尚未创建`sky`层，会自动创建`sky`层
 
 ```js
-import { TooltipPlugin } from 'leafer-x-';
+import { TooltipPlugin } from 'leafer-x-'
 const app = new App({ view: window })
 //new TooltipPlugin时可传入第二个参数用作用户配置
-const plugin =new TooltipPlugin(app)
+const plugin = new TooltipPlugin(app)
 ```
+
+### 配置项
+
+配置项可在创建 tooltipPlugin 实例时作为第二个参数传入
+
+```js
+new TooltipPlugin(app, {
+  info: ['width', 'height', 'innerId'],
+  includesType: ['Rect'],
+  excludesType: [],
+  ...
+})
+```
+
+具体配置项如下
+|字段|类型|默认值|说明|
+|:-:|:-:|:-:|:-:|
+|info|Array\<string>|['tag']|展示的属性字段|
+|showDelay|number|500|延迟显示的时间|
+|hideDelay|number|0|延迟隐藏的时间|
+|includesType|Array\<string>|[]|需要显示 tooltip 的元素，传入元素的 tag|
+|excludesType|Array\<string>|[]|不需要显示 tooltip 的元素，传入元素的 tag|
+|offset|Array\<number>|[5, 5]|tooltip 相对于鼠标位置的偏移量|
+|theme|string|'light'|主题，可选值：'light'、'dark'|
+|style|IStyle|见下表|tooltip 的样式配置|
+
+IStyle 属性
+|字段|类型|默认值|说明|
+|:-:|:-:|:-:|:-:|
+|backgroundColor|string|"white"|tooltip 的背景颜色|
+|stroke|string|"black"|tooltip 框线颜色|
+|color|string|"black"|tooltip 文本颜色|
+|borderRadius|number|8|tooltip 框线圆角|
+|padding|number|8|tooltip 内边距|
+|fontSize|number|14|tooltip 文本大小|
+|fontWeight|number|400|tooltip 文本粗细|
+|fontFamily|string|"Punctuation SC"|tooltip 文本字体,同 css 多个字体用逗号隔开|
 
 ### todo
 
@@ -49,43 +86,7 @@ const plugin =new TooltipPlugin(app)
   - [x] 包括/忽略类型功能
   - [ ] 触发方式
   - [ ] 虚拟触发
-
-### 配置项
-配置项可在创建tooltipPlugin实例时作为第二个参数传入
-```js
-new TooltipPlugin(app, {
-  info: ['width', 'height', 'innerId'],
-  includesType: ['Rect'],
-  excludesType: [],
-  ...
-})
-```
-具体配置项如下
-|字段|类型|默认值|说明|
-|:-:|:-:|:-:|:-:|
-|info|Array\<string>|['tag']|展示的属性字段|
-|showDelay|number|500|延迟显示的时间|
-|hideDelay|number|0|延迟隐藏的时间|
-|includesType|Array\<string>|[]|需要显示tooltip的元素，传入元素的tag|
-|excludesType|Array\<string>|[]|不需要显示tooltip的元素，传入元素的tag|
-|offset|Array\<number>|[5, 5]|tooltip相对于鼠标位置的偏移量|
-|theme|string|'light'|主题，可选值：'light'、'dark'|
-|style|IStyle|见下表|tooltip的样式配置|
-
-IStyle属性
-|字段|类型|默认值|说明|
-|:-:|:-:|:-:|:-:|
-|backgroundColor|string|"white"|tooltip的背景颜色|
-|stroke|string|"black"|tooltip框线颜色|
-|color|string|"black"|tooltip文本颜色|
-|borderRadius|number|8|tooltip框线圆角|
-|padding|number|8|tooltip内边距|
-|fontSize|number|14|tooltip文本大小|
-|fontWeight|number|400|tooltip文本粗细|
-|fontFamily|string|"Punctuation SC"|tooltip文本字体,同css多个字体用逗号隔开|
-
-
-[Github](https://github.com/214L)
+        [Github](https://github.com/214L)
 
 <!-- [更新日志]() -->
 <!-- [掘金]() -->
