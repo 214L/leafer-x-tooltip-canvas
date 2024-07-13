@@ -1,7 +1,7 @@
 {
     "name": "leafer-x-tooltip-canvas",
     "version": "1.0.0",
-    "author": "214L<leaferjs@163.com>",
+    "author": "214L",
     "license": "MIT",
     "type": "module",
     "main": "dist/index.esm.js",
