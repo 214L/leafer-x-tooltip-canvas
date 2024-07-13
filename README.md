@@ -36,8 +36,8 @@ const plugin =new TooltipPlugin(app)
   - [x] 延迟显示隐藏
 - 样式
   - [ ] 三角箭头
-  - [ ] 黑白主题
-  - [ ] 自定义主题
+  - [x] 黑白主题
+  - [x] 自定义主题
 - 位置
   - [x] offset
   - [x] 相对鼠标位置

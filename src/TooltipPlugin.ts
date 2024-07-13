@@ -31,6 +31,7 @@ export class TooltipPlugin {
   constructor(instance: ILeafer | App, config?: IUserConfig) {
     this.instance = instance
     this.config = Object.assign({}, defaultConfig, config)
+    this.initConfig()
     this.initState()
     this.pointEventId = this.initEvent()
   }
@@ -53,6 +54,13 @@ export class TooltipPlugin {
     }
   }
 
+  private initConfig(){
+    if(this.config.theme==='dark'){
+      this.config.style.backgroundColor = "black"
+      this.config.style.color = "white"
+      }
+    }
+  
   /**
    * @description 初始化事件处理
    * @private

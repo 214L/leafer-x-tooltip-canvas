@@ -43,6 +43,5 @@ new TooltipPlugin(app, {
   info: ['width', 'height', 'innerId'],
   includesType: ['Rect'],
   excludesType: [],
-  theme:'dark'
 })
 console.log(app)
