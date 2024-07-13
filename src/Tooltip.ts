@@ -77,7 +77,17 @@ export class Tooltip extends Pen implements ITooltip {
   private createShapes(pos = this.__.pointerPos): void {
     this.clear() // 清除之前创建的路径
     const { width, height, text } = handleTextStyle(this)
-    const { backgroundColor,stroke,color, padding, borderRadius,fontSize ,fontWeight,fontFamily} = this.config.style
+    const {
+      backgroundColor,
+      stroke,
+      color,
+      padding,
+      borderRadius,
+      fontSize,
+      fontWeight,
+      fontFamily
+    } = this.config.style
+    let offset = this.config.offset
     this.setStyle({
       fill: backgroundColor,
       stroke,
@@ -89,13 +99,19 @@ export class Tooltip extends Pen implements ITooltip {
         fontSize,
         fontWeight,
         fontFamily,
-        x: pos.x,
-        y: pos.y,
+        x: pos.x + offset[0],
+        y: pos.y + offset[1],
         text: text,
         padding,
       })
     )
-    this.roundRect(pos.x, pos.y, width, height, borderRadius)
+    this.roundRect(
+      pos.x + offset[0],
+      pos.y + offset[1],
+      width,
+      height,
+      borderRadius
+    )
     this.isShow = true
   }
 
