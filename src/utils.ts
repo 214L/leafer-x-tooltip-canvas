@@ -32,7 +32,6 @@ export const handleTextStyle = function (target: ILeaf, config: IUserConfig) {
 function handleContent(target: ILeaf, config: IUserConfig) {
   let str = ''
   const data = target as { [key: string]: any }
-  console.log(data);
   
   // 如果formatter函数存在，则使用formatter函数进行格式化
   if (config.formatter(data) !== undefined) {
