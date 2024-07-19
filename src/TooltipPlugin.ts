@@ -31,7 +31,7 @@ export class TooltipPlugin {
   constructor(instance: ILeafer | App, config?: IUserConfig) {
     this.instance = instance
     this.config = Object.assign({}, defaultConfig, config)
-    this.initConfig()
+    this.handleConfig()
     this.initState()
     this.pointEventId = this.initEvent()
   }
@@ -54,7 +54,7 @@ export class TooltipPlugin {
     }
   }
 
-  private initConfig(){
+  private handleConfig(){
     if(this.config.theme==='dark'){
       this.config.style.backgroundColor = "black"
       this.config.style.color = "white"
@@ -93,7 +93,6 @@ export class TooltipPlugin {
       this.hideTooltip()
       return
     }
-
     this.handleTooltip(event, target)
   }
 
@@ -148,7 +147,6 @@ export class TooltipPlugin {
   private handleTooltip(event: PointerEvent, target: ILeaf) {
     const id = getTooltipId(target)
     const tooltipList = this.aimLeafer.find('Tooltip') as Tooltip[]
-
     let processed = false
     for (const tooltip of tooltipList) {
       if (tooltip.id === id) {

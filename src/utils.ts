@@ -1,7 +1,6 @@
 import { Box } from 'leafer-ui'
 import { ILeaf } from '@leafer-ui/interface'
 import { IUserConfig } from './interface'
-import { Tooltip } from './Tooltip'
 /**
  * @description 获取uuid 考虑兼容性问题采用此方法
  * @param length id长度
@@ -10,11 +9,9 @@ import { Tooltip } from './Tooltip'
 export const getTooltipId = function (target: ILeaf) {
   return target.tag + target.innerId
 }
-export const handleTextStyle = function (tooltip?: Tooltip) {
-  let target = tooltip.target
-  let config = tooltip.config
+export const handleTextStyle = function (target: ILeaf, config: IUserConfig) {
   const str = handleContent(target, config)
-  const {fontSize,fontFamily,fontWeight,padding} = config.style
+  const { fontSize, fontFamily, fontWeight, padding } = config.style
   const box = new Box({
     children: [
       {
@@ -35,16 +32,22 @@ export const handleTextStyle = function (tooltip?: Tooltip) {
 function handleContent(target: ILeaf, config: IUserConfig) {
   let str = ''
   const data = target as { [key: string]: any }
-  const infoLength = config.info.length
-  if (infoLength === 0) {
-    str = data['tag']
-  } else if (infoLength === 1 && config.info[0] === 'tag') {
-    const dataName = config.info[0]
-    str = `${data[dataName]}`
+  console.log(data);
+  
+  // 如果formatter函数存在，则使用formatter函数进行格式化
+  if (config.formatter(data) !== undefined) {
+    str = config.formatter(data)
   } else {
-    str += config.info
-      .map((dataName: string) => `${dataName} : ${data[dataName]}`)
-      .join('\n')
+    // 如果formatter函数不存在，则根据showType进行默认格式化
+    if (config.showType == 'value') {
+      str += config.info
+        .map((dataName: string) => `${data[dataName]}`)
+        .join('\n')
+    } else if (config.showType == 'key-value') {
+      str += config.info
+        .map((dataName: string) => `${dataName} : ${data[dataName]}`)
+        .join('\n')
+    }
   }
   return str
 }

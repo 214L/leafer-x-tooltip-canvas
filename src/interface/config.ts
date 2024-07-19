@@ -1,4 +1,4 @@
-import {IFontWeight} from '@leafer-ui/interface'
+import { IFontWeight } from '@leafer-ui/interface'
 interface IUserConfig {
   reference?: 'pointer' | 'element'
   showDelay?: number
@@ -19,20 +19,22 @@ interface IUserConfig {
     | 'right-end'
   offset?: [number, number]
   info?: Array<string>
+  formatter?: (item?: any) => string | undefined
+  showType?: 'value' | 'key-value'
   preventOverflow?: boolean
   includesType?: Array<string>
   excludesType?: Array<string>
   theme?: 'light' | 'dark'
-  style?:IStyleConfig
+  style?: IStyleConfig
 }
-interface IStyleConfig{
-  backgroundColor:string,
-  stroke:string,
-  color:string,
-  borderRadius:number,
-  padding:number,
-  fontSize:number,
-  fontWeight:IFontWeight,
-  fontFamily:string,
+interface IStyleConfig {
+  backgroundColor?: string
+  stroke?: string
+  color?: string
+  borderRadius?: number
+  padding?: number
+  fontSize?: number
+  fontWeight?: IFontWeight
+  fontFamily?: string
 }
 export type { IUserConfig }

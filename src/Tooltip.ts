@@ -62,7 +62,6 @@ export class Tooltip extends Pen implements ITooltip {
 
   @dataType()
   public declare target?: ILeaf
-
   constructor(data: ITooltipInputData) {
     super(data)
     this.target = data.target
@@ -76,7 +75,7 @@ export class Tooltip extends Pen implements ITooltip {
    */
   private createShapes(pos = this.__.pointerPos): void {
     this.clear() // 清除之前创建的路径
-    const { width, height, text } = handleTextStyle(this)
+    const { width, height, text } = handleTextStyle(this.target, this.config)
     const {
       backgroundColor,
       stroke,
@@ -85,7 +84,7 @@ export class Tooltip extends Pen implements ITooltip {
       borderRadius,
       fontSize,
       fontWeight,
-      fontFamily
+      fontFamily,
     } = this.config.style
     let offset = this.config.offset
     this.setStyle({
