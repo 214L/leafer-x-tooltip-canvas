@@ -1,30 +1,30 @@
 # leafer-x-tooltip-canvas
 
 <p>
-  <a href='./README.en.md'>English</a> | 简体中文
+  English | <a href="./README.md">简体中文</a>
 </p>
 
-## 插件简介
+## Introduction
 
-leafer-x-tooltip-canvas 是 [Leafer-ui](https://leaferjs.com/ui/) 的第三方 tooltip 插件，用于向用户展示信息。
+leafer-x-tooltip-canvas is a third-party tooltip plugin for [Leafer-ui](https://leaferjs.com/ui/), designed to display information to users.
 
 <!-- - [在线体验（尚未完成）]() -->
 
-## 快速上手
+## Quick Start
 
-### 安装
+### Installation
 
 ```node
 npm i leafer-x-tooltip-canvas --save
 ```
 
-### 使用方法
+### Usage
 
-使用插件时，创建一个插件实例，并传入 `App` 或者 `Leafer` 实例。（推荐使用`App`）
+When using the plugin, create an instance of the plugin and pass in an App or Leafer instance. (It is recommended to use App)
 
-如果传入的是 `App`,会在`sky`层中绘制弹窗，如果传入的是 `Leafer`，会在传入的`Leafer`层中绘制弹窗。
+If an App is passed in, the popup will be drawn in the sky layer. If a Leafer is passed in, the popup will be drawn in the Leafer layer that is passed in.
 
-> 请注意：如果传入`App`时尚未创建`sky`层，会自动创建`sky`层
+> Note: If the sky layer has not been created when passing in App, it will be automatically created.
 
 ```js
 import { TooltipPlugin } from 'leafer-x-tooltip-canvas'
@@ -32,9 +32,9 @@ const app = new App({ view: window })
 const plugin = new TooltipPlugin(app)
 ```
 
-### 配置项
+### Config overview
 
-配置项可在创建 tooltipPlugin 实例时作为第二个参数传入
+Config can be passed as the second parameter when creating an instance of tooltipPlugin.
 
 ```js
 new TooltipPlugin(app, {
@@ -45,168 +45,169 @@ new TooltipPlugin(app, {
 })
 ```
 
-具体配置项如下，点击字段名可转跳至[详细配置](#详细配置)
+The specific config options are as follows. Click on the field name to jump to [Config Details](#Config details)
+
  <table class="styled-table jump-table">
   <thead>
     <tr>
-      <th>字段</th>
-      <th>类型</th>
-      <th>默认值</th>
-      <th>说明</th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><a href="#显示信息">info</a></td>
+      <td><a href="#display-information">info</a></td>
       <td>Array&lt;string&gt;</td>
       <td>['tag']</td>
-      <td>显示的属性字段</td>
+      <td>The attribute fields to be displayed</td>
     </tr>
   <tr>
-      <td><a href="#显示类型">showType</a></td>
+      <td><a href="#display-type">showType</a></td>
       <td>'value'&#124;'key-value'</td>
       <td>'value'</td>
-      <td>tooltip信息显示的方式</td>
+      <td>The way tooltip information is displayed</td>
     </tr>
     <tr>
-      <td><a href="#格式化">formatter</a></td>
+      <td><a href="#formatter">formatter</a></td>
       <td>() => string</td>
       <td>() => undefined</td>
-      <td>格式化tooltip显示内容的函数</td>
+      <td>The function to format the content displayed in the tooltip</td>
     </tr>
     <tr>
-      <td><a href="#延迟显示隐藏">showDelay</a></td>
+      <td><a href="#delayed-displayhide">showDelay</a></td>
       <td>number</td>
       <td>500</td>
-      <td>延迟显示的时间</td>
+      <td>The time in milliseconds to delay before showing the tooltip</td>
     </tr>
     <tr>
-      <td><a href="#延迟显示隐藏">hideDelay</a></td>
+      <td><a href="#delayed-displayhide">hideDelay</a></td>
       <td>number</td>
       <td>0</td>
-      <td>延迟隐藏的时间</td>
+      <td>The time in milliseconds to delay before hiding the tooltip</td>
     </tr>
     <tr>
-      <td><a href="#包括忽略类型">includesType</a></td>
+      <td><a href="#includeexclude-types">includesType</a></td>
       <td>Array&lt;string&gt;</td>
       <td>[]</td>
-      <td>需要显示 tooltip 的元素，传入元素的 tag</td>
+      <td>The tags of elements that need to display the tooltip</td>
     </tr>
     <tr>
-      <td><a href="#包括忽略类型">excludesType</a></td>
+      <td><a href="#includeexclude-types">excludesType</a></td>
       <td>Array&lt;string&gt;</td>
       <td>[]</td>
-      <td>不需要显示 tooltip 的元素，传入元素的 tag</td>
+      <td>The tags of elements that should not display the tooltip</td>
     </tr>
     <tr>
       <td><a href="#offset">offset</a></td>
       <td>Array&lt;number&gt;</td>
       <td>[5, 5]</td>
-      <td>tooltip 相对于鼠标位置的偏移量</td>
+      <td>The offset of the tooltip relative to the position</td>
     </tr>
     <tr>
-      <td><a href="#黑白主题">theme</a></td>
+      <td><a href="#lightdark-themes">theme</a></td>
       <td>string</td>
       <td>'light'</td>
-      <td>主题，可选值：'light'、'dark'</td>
+      <td>The theme of the tooltip, with the options being 'light' and 'dark'</td>
     </tr>
     <tr>
-      <td><a href="#样式">style</a></td>
+      <td><a href="#style">style</a></td>
       <td>IStyle</td>
-      <td>见下表</td>
-      <td>tooltip 的样式配置</td>
+      <td>see below</td>
+      <td>The style configuration for the tooltip</td>
     </tr>
   </tbody>
 </table>
 
 
 
-IStyle 属性
-<table class="styled-table"">
+IStyle Properties
+<table class="styled-table">
     <tr>
-        <th>字段</th>
-        <th>类型</th>
-        <th>默认值</th>
-        <th>说明</th>
+        <th>Field</th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td>backgroundColor</td>
         <td>string</td>
         <td>"white"</td>
-        <td>tooltip 的背景颜色</td>
+        <td>The background color of the tooltip</td>
     </tr>
     <tr>
         <td>stroke</td>
         <td>string</td>
         <td>"black"</td>
-        <td>tooltip 框线颜色</td>
+        <td>The border color of the tooltip</td>
     </tr>
     <tr>
         <td>color</td>
         <td>string</td>
         <td>"black"</td>
-        <td>tooltip 文本颜色</td>
+        <td>The text color of the tooltip</td>
     </tr>
     <tr>
         <td>borderRadius</td>
         <td>number</td>
         <td>8</td>
-        <td>tooltip 框线圆角</td>
+        <td>The border radius of the tooltip for rounded corners</td>
     </tr>
     <tr>
         <td>padding</td>
         <td>number</td>
         <td>8</td>
-        <td>tooltip 内边距</td>
+        <td>The padding inside the tooltip</td>
     </tr>
     <tr>
         <td>fontSize</td>
         <td>number</td>
         <td>14</td>
-        <td>tooltip 文本大小</td>
+        <td>The font size of the tooltip text</td>
     </tr>
     <tr>
         <td>fontWeight</td>
         <td>number</td>
         <td>400</td>
-        <td>tooltip 文本粗细</td>
+        <td>The font weight of the tooltip text, where 400 is normal and 700 is bold</td>
     </tr>
     <tr>
         <td>fontFamily</td>
         <td>string</td>
         <td>"Punctuation SC"</td>
-        <td>tooltip 文本字体,同 css 多个字体用逗号隔开</td>
+        <td>The font family of the tooltip text, which can include multiple fonts separated by commas, similar to CSS font-family styling</td>
     </tr>
 </table>
 
-### todo
+### Todo
 
-- 显示/隐藏
-  - [x] 基本显示隐藏
-  - [x] 延迟显示隐藏
-- 样式
-  - [ ] 三角箭头
-  - [x] 黑白主题
-  - [x] 自定义样式
-- 位置
+- Display/Hide
+  - [x] Basic Display/Hide
+  - [x] Delayed Display/Hide
+- Style
+  - [ ] Triangle Arrow
+  - [x] Light/Dark Themes
+  - [x] Custom Style
+- Position
   - [x] offset
-  - [x] 相对鼠标位置
-  - [ ] 相对元素位置
-  - [ ] 显示避让逻辑
-- 信息
-  - [x] 自定义信息
+  - [x] Custom Style
+  - [ ] Relative to Element Position
+  - [ ] Display Avoidance
+- Information
+  - [x] Custom Information
   - [x] formatter
-- 交互
-  - [x] 包括/忽略类型功能
-  - [ ] 触发方式
-  - [ ] 虚拟触发
+- Interaction
+  - [x] Include/Exclude Type Function
+  - [ ] Trigger Method
+  - [ ] Virtual Trigger
 
-### 详细配置
-<a href="#配置项" class="fixed-right">:dizzy:配置项</a>
+### Config details
+<a href="#config-overview" class="fixed-right">:dizzy:Config Overview</a>
 
-#### 内容 <a href="#配置项" style="position:relative;right:0">:arrow_up:</a>
-##### 显示信息 
-通过传入`info`字段，可配置显示的属性字段。
+#### Content
+##### Display Information
+Configure the displayed attribute fields by passing in the `info` field.
 <table class="center-table"> 
     <tr> 
         <td> 
@@ -218,8 +219,8 @@ IStyle 属性
    </tr> 
 </table>
 
-##### 显示类型
-可配置显示信息的方式，有两种：`value`、`key-value`。
+##### Display Type
+Configure the display method of the information, there are two types: `value`,`key-value`.
 <table class="center-table"> 
     <tr> 
         <td> 
@@ -239,8 +240,9 @@ IStyle 属性
     </tr>
 </table>
 
-##### 格式化 
-可配置显示信息的格式化函数，参数为被作用的元素属性集合。返回的值作为tooltip的文本。
+##### Formatter 
+Configure the formatting function for the information, the parameter is the attribute collection of the element being acted upon. The returned value serves as the text for the tooltip.
+
 ```js
 formatter: (item) => {
     return `${item.tag}(${item.innerId})`
@@ -248,9 +250,9 @@ formatter: (item) => {
 ```
  <img src="./.github/assets/formatter.png">
 
-#### 显示隐藏
-##### 延迟显示隐藏
-可配置显示的延迟时间和隐藏的延迟时间。
+#### Display/Hide
+##### Delayed Display/Hide
+Configure the delay time for display and the delay time for hiding.
 <table class="center-table"> 
     <tr> 
         <td> 
@@ -270,14 +272,14 @@ formatter: (item) => {
     </tr>
 </table>
 
-#### 交互
-##### 包括/忽略类型
-通过配置`includesType`和`excludesType`字段，可设置需要展示/隐藏tooltip的元素类型。
+#### Interaction
+##### Include/Exclude Types
+Configure the element tags to be displayed/hidden by setting the `includesType` and `excludesType` property.
 
-- 当只配置`includesType`时，只显示`includesType`中配置的元素。
-- 当只配置`excludesType`时，只不显示`excludesType`中配置的元素。
-- 可同时配置`includesType`和`excludesType`。
-- `includesType`优先级大于`excludesType`。
+- When only `includesType` is configured, only the elements configured in `includesType` are displayed.
+- When only `excludesType` is configured, only the elements configured in `excludesType` are not displayed.
+- Both `includesType` and `excludesType` can be configured at the same time.
+- The priority of `includesType` is higher than `excludesType`.
  <table class="center-table"> 
     <tr> 
         <td> 
@@ -290,9 +292,9 @@ formatter: (item) => {
 </table>
 
 
-#### 样式
-##### 黑白主题
-插件默认提供两种主题，分别为`light`和`dark`，可以通过配置`theme`字段来切换主题。默认主题为`light`
+#### Style
+##### Light/Dark Themes
+The plugin provides two themes by default, `light` and `dark`, which can be switched by configuring the theme field. The default theme is light.
  <table class="center-table"> 
     <tr> 
         <td> 
@@ -312,9 +314,9 @@ formatter: (item) => {
     </tr>
 </table>
 
-#### 位置
-##### offset
-可配置tooltip相对于鼠标位置的偏移量,第一个参数为x轴偏移量，第二个参数为y轴偏移量。
+#### Position
+##### Offset
+Configure the offset of the tooltip relative to the mouse position, the first parameter is the offset on the x-axis, and the second parameter is the offset on the y-axis.
 <table class="center-table"> 
     <tr> 
         <td> 
@@ -326,8 +328,8 @@ formatter: (item) => {
    </tr> 
 </table>
 
-##### 自定义样式
-用户通过配置`style`字段来自定义样式。
+##### Custom Style
+Users can customize the style by configuring the `style` field.
 <table class="center-table"> 
 </table>
    <tr> 
