@@ -1,51 +1,60 @@
 {
-    "name": "leafer-x-tooltip-canvas",
-    "version": "1.0.0",
-    "author": "214L",
-    "license": "MIT",
-    "type": "module",
-    "main": "dist/index.esm.js",
-    "exports": {
-        "import": "./dist/index.esm.js",
-        "require": "./dist/index.cjs"
-    },
-    "types": "types/index.d.ts",
-    "files": ["src", "types", "dev", "dist"],
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/214L/leafer-x-popup-canvas"
-    },
-    "homepage": "https://github.com/214L/leafer-x-popup-canvas",
-    "bugs": "https://github.com/214L/leafer-x-popup-canvas/issues",
-    "scripts": {
-        "start": "cross-env NODE_ENV=development rollup -c -w",
-        "build": "cross-env PLATFORM=all rollup -c",
-        "test": "vitest"
-    },
-    "devDependencies": {
-        "@rollup/plugin-commonjs": "^25.0.4",
-        "@rollup/plugin-html": "^1.0.2",
-        "@rollup/plugin-multi-entry": "^6.0.0",
-        "@rollup/plugin-node-resolve": "^15.2.1",
-        "@rollup/plugin-terser": "^0.4.3",
-        "@rollup/plugin-typescript": "^11.1.3",
-        "@typescript-eslint/eslint-plugin": "^5.54.1",
-        "@typescript-eslint/parser": "^5.54.1",
-        "rollup": "^3.29.2",
-        "rollup-plugin-dts": "^6.0.2",
-        "rollup-plugin-livereload": "^2.0.5",
-        "rollup-plugin-serve": "^2.0.2",
-        "rollup-plugin-string": "^3.0.0",
-        "tslib": "^2.6.2",
-        "typescript": "^5.2.2",
-        "vite": "^4.4.9",
-        "vitest": "^0.34.4",
-        "jsdom": "^22.0.0",
-        "cross-env": "^7.0.3",
-        "eslint": "^8.49.0",
-        "leafer-ui": "^1.0.0-rc.22"
-    },
-    "dependencies": {
-        "@leafer-ui/core": "^1.0.0-rc.22"
-    }
+  "name": "leafer-x-tooltip-canvas",
+  "version": "1.0.0",
+  "author": "214L",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.esm.js",
+  "exports": {
+    "import": "./dist/index.esm.js",
+    "require": "./dist/index.cjs"
+  },
+  "types": "types/index.d.ts",
+  "files": [
+    "src",
+    "types",
+    "dev",
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/214L/leafer-x-popup-canvas"
+  },
+  "homepage": "https://github.com/214L/leafer-x-popup-canvas",
+  "bugs": "https://github.com/214L/leafer-x-popup-canvas/issues",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development rollup -c -w",
+    "build": "cross-env PLATFORM=all rollup -c",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-html": "^1.0.2",
+    "@rollup/plugin-multi-entry": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.2.1",
+    "@rollup/plugin-terser": "^0.4.3",
+    "@rollup/plugin-typescript": "^11.1.3",
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
+    "@typescript-eslint/parser": "^5.54.1",
+    "rollup": "^3.29.2",
+    "rollup-plugin-dts": "^6.0.2",
+    "rollup-plugin-livereload": "^2.0.5",
+    "rollup-plugin-serve": "^2.0.2",
+    "rollup-plugin-string": "^3.0.0",
+    "rollup-plugin-copy": "^3.5.0",
+    "tslib": "^2.6.2",
+    "typescript": "^5.2.2",
+    "vite": "^4.4.9",
+    "vitest": "^0.34.4",
+    "jsdom": "^22.0.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.49.0",
+    "leafer-ui": "^1.0.2"
+  },
+  "dependencies": {
+    "@leafer-ui/core": "^1.0.0-rc.22"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  }
 }

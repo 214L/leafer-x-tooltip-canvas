@@ -5,6 +5,7 @@ import terser from "@rollup/plugin-terser"
 import dts from "rollup-plugin-dts"
 
 import html from '@rollup/plugin-html'
+import copy from 'rollup-plugin-copy'
 import livereload from 'rollup-plugin-livereload'
 import serve from 'rollup-plugin-serve'
 
@@ -12,7 +13,7 @@ import serve from 'rollup-plugin-serve'
 // config
 
 const basePath = '.'
-const globalName = 'LeaferX.selector' // <script /> 插件的全局变量名
+const globalName = 'LeaferX.tooltipCanvas' // <script /> 插件的全局变量名
 const supportPlatforms = ['web','worker','node','miniapp']
 const external = {'@leafer-ui/core':  'LeaferUI'} // 声明外部依赖，不打进插件包，只引用
 
@@ -65,6 +66,7 @@ if(isDev) {
                 title: "Leafer Plugin",
                 meta: [{charset: 'utf-8'}, {name: 'viewport', content: 'width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'}]
             }),
+            copy({ targets: [{ src: 'public/*', dest: 'dev/' }]}),
             livereload(),
             serve({contentBase: ['dev/'],  port})
         ]
