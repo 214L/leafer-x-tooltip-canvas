@@ -18,10 +18,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/214L/leafer-x-popup-canvas"
+    "url": "https://github.com/214L/leafer-x-tooltip-canvas"
   },
-  "homepage": "https://github.com/214L/leafer-x-popup-canvas",
-  "bugs": "https://github.com/214L/leafer-x-popup-canvas/issues",
+  "homepage": "https://github.com/214L/leafer-x-tooltip-canvas",
+  "bugs": "https://github.com/214L/leafer-x-tooltip-canvas/issues",
   "scripts": {
     "start": "cross-env NODE_ENV=development rollup -c -w",
     "build": "cross-env PLATFORM=all rollup -c",
