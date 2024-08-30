@@ -1,8 +1,5 @@
-# leafer-x-tooltip-canvas
-
-<p>
-  English | <a href="./README.md">简体中文</a>
-</p>
+# leafer-x-tooltip-canvass
+English | [简体中文](./README.md)
 
 ## Introduction
 

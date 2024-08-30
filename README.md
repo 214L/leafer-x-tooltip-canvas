@@ -1,8 +1,5 @@
 # leafer-x-tooltip-canvas
-
-<p>
-  <a href='./README.en.md'>English</a> | 简体中文
-</p>
+[English](./README.en.md) | 简体中文
 
 ## 插件简介
 
