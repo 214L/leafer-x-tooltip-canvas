@@ -50,10 +50,12 @@
     "jsdom": "^22.0.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.49.0",
-    "leafer-ui": "^1.0.2"
+    "leafer-ui": "^1.0.4"
   },
   "dependencies": {
-    "@leafer-ui/core": "^1.0.0-rc.22"
+    "@leafer-ui/core": "^1.0.4",
+    "leafer-ui": "^1.0.4",
+    "@leafer-in/flow": "^1.0.4"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"

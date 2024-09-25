@@ -1,9 +1,5 @@
 import { App, PointerEvent } from '@leafer-ui/core'
-import type {
-  IEventListenerId,
-  ILeaf,
-  ILeafer,
-} from '@leafer-ui/interface'
+import type { IEventListenerId, ILeaf, ILeafer } from '@leafer-ui/interface'
 import { IUserConfig } from './interface'
 import { Tooltip } from './Tooltip'
 import { getTooltipId } from './utils'
@@ -54,13 +50,13 @@ export class TooltipPlugin {
     }
   }
 
-  private handleConfig(){
-    if(this.config.theme==='dark'){
-      this.config.style.backgroundColor = "black"
-      this.config.style.color = "white"
-      }
+  private handleConfig() {
+    if (this.config.theme === 'dark') {
+      this.config.style.backgroundColor = 'black'
+      this.config.style.color = 'white'
     }
-  
+  }
+
   /**
    * @description 初始化事件处理
    * @private
@@ -95,12 +91,13 @@ export class TooltipPlugin {
     }
     this.handleTooltip(event, target)
   }
-
   private filterTarget(list: ILeaf[]): ILeaf | null {
-    const ignoreTag = ['Leafer', 'App']
+    const { ignoreType, excludesType, throughExcludes } = this.config
+    const arr = throughExcludes ? ignoreType.concat(excludesType) : ignoreType
+    
     const pureResult = list.filter((item) => {
       if (
-        ignoreTag.includes(item?.tag) ||
+        arr.includes(item?.tag) ||
         item?.parent?.tag === 'Tooltip' ||
         item?.className === 'leafer-x-tooltip'
       ) {

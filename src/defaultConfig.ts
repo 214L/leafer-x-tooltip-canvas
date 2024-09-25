@@ -12,6 +12,8 @@ export const defaultConfig: IUserConfig = {
   preventOverflow: false,
   includesType: [],
   excludesType: [],
+  ignoreType:['Leafer','App','Flow'],
+  throughExcludes:false,
   theme: 'light',
   style: {
     backgroundColor: 'white',

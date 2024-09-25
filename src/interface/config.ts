@@ -24,6 +24,8 @@ interface IUserConfig {
   preventOverflow?: boolean
   includesType?: Array<string>
   excludesType?: Array<string>
+  ignoreType?: Array<string>
+  throughExcludes?: boolean
   theme?: 'light' | 'dark'
   style?: IStyleConfig
 }

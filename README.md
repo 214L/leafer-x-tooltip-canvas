@@ -1,4 +1,5 @@
 # leafer-x-tooltip-canvas
+
 [English](./README.en.md) | 简体中文
 
 ## 插件简介
@@ -43,6 +44,7 @@ new TooltipPlugin(app, {
 ```
 
 具体配置项如下，点击字段名可转跳至[详细配置](#详细配置)
+
  <table class="styled-table jump-table">
   <thead>
     <tr>
@@ -84,16 +86,28 @@ new TooltipPlugin(app, {
       <td>延迟隐藏的时间</td>
     </tr>
     <tr>
-      <td><a href="#包括忽略类型">includesType</a></td>
+      <td><a href="#包括排除类型">includesType</a></td>
       <td>Array&lt;string&gt;</td>
-      <td>[]</td>
+      <td>[ ]</td>
       <td>需要显示 tooltip 的元素，传入元素的 tag</td>
     </tr>
     <tr>
-      <td><a href="#包括忽略类型">excludesType</a></td>
+      <td><a href="#包括排除类型">excludesType</a></td>
       <td>Array&lt;string&gt;</td>
-      <td>[]</td>
+      <td>[ ]</td>
       <td>不需要显示 tooltip 的元素，传入元素的 tag</td>
+    </tr>
+    <tr>
+      <td>throughExcludes</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>是否穿过excludesType拾取下面的元素</td>
+    </tr>
+    <tr>
+      <td>ignoreType</td>
+      <td>Array&lt;string&gt;</td>
+      <td>['App','Leafer','Flow']</td>
+      <td>被忽略的元素，传入元素的 tag，一般不需要修改，与excludesType的区别在于不会被throughExcludes影响。</td>
     </tr>
     <tr>
       <td><a href="#offset">offset</a></td>
@@ -116,9 +130,8 @@ new TooltipPlugin(app, {
   </tbody>
 </table>
 
-
-
 IStyle 属性
+
 <table class="styled-table"">
     <tr>
         <th>字段</th>
@@ -199,11 +212,15 @@ IStyle 属性
   - [ ] 虚拟触发
 
 ### 详细配置
+
 <a href="#配置项" class="fixed-right">:dizzy:配置项</a>
 
 #### 内容 <a href="#配置项" style="position:relative;right:0">:arrow_up:</a>
-##### 显示信息 
+
+##### 显示信息
+
 通过传入`info`字段，可配置显示的属性字段。
+
 <table class="center-table"> 
     <tr> 
         <td> 
@@ -216,7 +233,9 @@ IStyle 属性
 </table>
 
 ##### 显示类型
+
 可配置显示信息的方式，有两种：`value`、`key-value`。
+
 <table class="center-table"> 
     <tr> 
         <td> 
@@ -236,18 +255,24 @@ IStyle 属性
     </tr>
 </table>
 
-##### 格式化 
-可配置显示信息的格式化函数，参数为被作用的元素属性集合。返回的值作为tooltip的文本。
+##### 格式化
+
+可配置显示信息的格式化函数，参数为被作用的元素属性集合。返回的值作为 tooltip 的文本。
+
 ```js
 formatter: (item) => {
-    return `${item.tag}(${item.innerId})`
+  return `${item.tag}(${item.innerId})`
 }
 ```
+
  <img src="./.github/assets/formatter.png">
 
 #### 显示隐藏
+
 ##### 延迟显示隐藏
+
 可配置显示的延迟时间和隐藏的延迟时间。
+
 <table class="center-table"> 
     <tr> 
         <td> 
@@ -268,8 +293,10 @@ formatter: (item) => {
 </table>
 
 #### 交互
+
 ##### 包括/忽略类型
-通过配置`includesType`和`excludesType`字段，可设置需要展示/隐藏tooltip的元素类型。
+
+通过配置`includesType`和`excludesType`字段，可设置需要展示/隐藏 tooltip 的元素类型。
 
 - 当只配置`includesType`时，只显示`includesType`中配置的元素。
 - 当只配置`excludesType`时，只不显示`excludesType`中配置的元素。
@@ -286,10 +313,12 @@ formatter: (item) => {
    </tr> 
 </table>
 
-
 #### 样式
+
 ##### 黑白主题
+
 插件默认提供两种主题，分别为`light`和`dark`，可以通过配置`theme`字段来切换主题。默认主题为`light`
+
  <table class="center-table"> 
     <tr> 
         <td> 
@@ -310,8 +339,11 @@ formatter: (item) => {
 </table>
 
 #### 位置
+
 ##### offset
-可配置tooltip相对于鼠标位置的偏移量,第一个参数为x轴偏移量，第二个参数为y轴偏移量。
+
+可配置 tooltip 相对于鼠标位置的偏移量,第一个参数为 x 轴偏移量，第二个参数为 y 轴偏移量。
+
 <table class="center-table"> 
     <tr> 
         <td> 
@@ -324,7 +356,9 @@ formatter: (item) => {
 </table>
 
 ##### 自定义样式
+
 用户通过配置`style`字段来自定义样式。
+
 <table class="center-table"> 
 </table>
    <tr> 
@@ -340,6 +374,7 @@ formatter: (item) => {
         fontSize: 16,
         fontWeight: 400,
     }
+
   </span>
       </td>
       <td>
@@ -348,9 +383,7 @@ formatter: (item) => {
     </tr>
 </table>
 
-
 [Github](https://github.com/214L/leafer-x-popup-canvas)
-
 
 <style> 
 .center-table { 

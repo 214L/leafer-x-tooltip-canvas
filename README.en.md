@@ -1,4 +1,5 @@
 # leafer-x-tooltip-canvass
+
 English | [简体中文](./README.md)
 
 ## Introduction
@@ -97,6 +98,18 @@ The specific config options are as follows. Click on the field name to jump to [
       <td>The tags of elements that should not display the tooltip</td>
     </tr>
     <tr>
+      <td>throughExcludes</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>If the plugin while passing through excludesType to pick elements</td>
+    </tr>
+    <tr>
+      <td>ignoreType</td>
+      <td>Array&lt;string&gt;</td>
+      <td>['App','Leafer','Flow']</td>
+      <td>Where the tag of the passed elements generally doesn't need modification; the difference from excludesType is that it won't be affected by throughExcludes.</td>
+    </tr>
+    <tr>
       <td><a href="#offset">offset</a></td>
       <td>Array&lt;number&gt;</td>
       <td>[5, 5]</td>
@@ -117,9 +130,8 @@ The specific config options are as follows. Click on the field name to jump to [
   </tbody>
 </table>
 
-
-
 IStyle Properties
+
 <table class="styled-table">
     <tr>
         <th>Field</th>
@@ -200,11 +212,15 @@ IStyle Properties
   - [ ] Virtual Trigger
 
 ### Config details
+
 <a href="#config-overview" class="fixed-right">:dizzy:Config Overview</a>
 
 #### Content
+
 ##### Display Information
+
 Configure the displayed attribute fields by passing in the `info` field.
+
 <table class="center-table"> 
     <tr> 
         <td> 
@@ -217,7 +233,9 @@ Configure the displayed attribute fields by passing in the `info` field.
 </table>
 
 ##### Display Type
+
 Configure the display method of the information, there are two types: `value`,`key-value`.
+
 <table class="center-table"> 
     <tr> 
         <td> 
@@ -237,19 +255,24 @@ Configure the display method of the information, there are two types: `value`,`k
     </tr>
 </table>
 
-##### Formatter 
+##### Formatter
+
 Configure the formatting function for the information, the parameter is the attribute collection of the element being acted upon. The returned value serves as the text for the tooltip.
 
 ```js
 formatter: (item) => {
-    return `${item.tag}(${item.innerId})`
+  return `${item.tag}(${item.innerId})`
 }
 ```
+
  <img src="./.github/assets/formatter.png">
 
 #### Display/Hide
+
 ##### Delayed Display/Hide
+
 Configure the delay time for display and the delay time for hiding.
+
 <table class="center-table"> 
     <tr> 
         <td> 
@@ -270,7 +293,9 @@ Configure the delay time for display and the delay time for hiding.
 </table>
 
 #### Interaction
+
 ##### Include/Exclude Types
+
 Configure the element tags to be displayed/hidden by setting the `includesType` and `excludesType` property.
 
 - When only `includesType` is configured, only the elements configured in `includesType` are displayed.
@@ -288,10 +313,12 @@ Configure the element tags to be displayed/hidden by setting the `includesType` 
    </tr> 
 </table>
 
-
 #### Style
+
 ##### Light/Dark Themes
+
 The plugin provides two themes by default, `light` and `dark`, which can be switched by configuring the theme field. The default theme is light.
+
  <table class="center-table"> 
     <tr> 
         <td> 
@@ -312,8 +339,11 @@ The plugin provides two themes by default, `light` and `dark`, which can be swit
 </table>
 
 #### Position
+
 ##### Offset
+
 Configure the offset of the tooltip relative to the mouse position, the first parameter is the offset on the x-axis, and the second parameter is the offset on the y-axis.
+
 <table class="center-table"> 
     <tr> 
         <td> 
@@ -326,7 +356,9 @@ Configure the offset of the tooltip relative to the mouse position, the first pa
 </table>
 
 ##### Custom Style
+
 Users can customize the style by configuring the `style` field.
+
 <table class="center-table"> 
 </table>
    <tr> 
@@ -342,6 +374,7 @@ Users can customize the style by configuring the `style` field.
         fontSize: 16,
         fontWeight: 400,
     }
+
   </span>
       </td>
       <td>
@@ -350,9 +383,7 @@ Users can customize the style by configuring the `style` field.
     </tr>
 </table>
 
-
 [Github](https://github.com/214L/leafer-x-popup-canvas)
-
 
 <style> 
 .center-table { 
