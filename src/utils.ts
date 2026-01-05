@@ -1,6 +1,7 @@
 import { Box } from 'leafer-ui'
 import { ILeaf } from '@leafer-ui/interface'
 import { IUserConfig } from './interface'
+import { ShowType } from './constants'
 
 /**
  * @description 文本尺寸缓存,避免重复计算
@@ -88,7 +89,7 @@ function handleContent(target: ILeaf, config: IUserConfig) {
 
   // 如果formatter函数不存在或执行失败，则根据showType进行默认格式化
   if (!str) {
-    if (config.showType == 'value') {
+    if (config.showType === ShowType.VALUE) {
       str += config.info
         .map((dataName: string) => {
           const value = data[dataName]
@@ -96,7 +97,7 @@ function handleContent(target: ILeaf, config: IUserConfig) {
           return value !== null && value !== undefined ? String(value) : ''
         })
         .join('\n')
-    } else if (config.showType == 'key-value') {
+    } else if (config.showType === ShowType.KEY_VALUE) {
       str += config.info
         .map((dataName: string) => {
           const value = data[dataName]

@@ -9,6 +9,7 @@ import {
 } from 'leafer-ui'
 import { IPos, IUserConfig } from './interface'
 import { handleTextStyle } from './utils'
+import { TOOLTIP_TAG, TOOLTIP_CLASS_NAME } from './constants'
 
 interface ITooltip extends IPen {
   target?: ILeaf
@@ -40,9 +41,9 @@ export class TooltipData extends PenData implements ITooltipData {
 @registerUI()
 export class Tooltip extends Pen implements ITooltip {
   public get __tag() {
-    return 'Tooltip'
+    return TOOLTIP_TAG
   }
-  public className: 'leafer-x-tooltip'
+  public className: typeof TOOLTIP_CLASS_NAME
   @dataProcessor(TooltipData)
   public declare __: ITooltipData
 
@@ -93,7 +94,7 @@ export class Tooltip extends Pen implements ITooltip {
     })
     this.add(
       new Text({
-        className: 'leafer-x-tooltip',
+        className: TOOLTIP_CLASS_NAME,
         fill: color,
         fontSize,
         fontWeight,

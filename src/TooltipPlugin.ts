@@ -4,6 +4,7 @@ import { IUserConfig } from './interface'
 import { Tooltip } from './Tooltip'
 import { getTooltipId } from './utils'
 import { defaultConfig } from './defaultConfig'
+import { TOOLTIP_TAG, TOOLTIP_CLASS_NAME } from './constants'
 
 export class TooltipPlugin {
   /**
@@ -163,8 +164,8 @@ export class TooltipPlugin {
       if (
         shouldIgnore ||
         shouldExclude ||
-        item?.parent?.tag === 'Tooltip' ||
-        item?.className === 'leafer-x-tooltip'
+        item?.parent?.tag === TOOLTIP_TAG ||
+        item?.className === TOOLTIP_CLASS_NAME
       ) {
         return false
       }
