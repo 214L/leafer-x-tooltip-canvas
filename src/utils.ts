@@ -50,7 +50,8 @@ export const handleTextStyle = function (target: ILeaf, config: IUserConfig) {
 
 function handleContent(target: ILeaf, config: IUserConfig) {
   let str = ''
-  const data = target as { [key: string]: any }
+  // 保持 ILeaf 类型，使用 Record 进行更安全的索引访问
+  const data = target as ILeaf & Record<string, unknown>
 
   // 如果formatter函数存在，则使用formatter函数进行格式化
   if (config.formatter && typeof config.formatter === 'function') {
@@ -69,11 +70,20 @@ function handleContent(target: ILeaf, config: IUserConfig) {
   if (!str) {
     if (config.showType == 'value') {
       str += config.info
-        .map((dataName: string) => `${data[dataName]}`)
+        .map((dataName: string) => {
+          const value = data[dataName]
+          // 检查值是否存在且可转换为字符串
+          return value !== null && value !== undefined ? String(value) : ''
+        })
         .join('\n')
     } else if (config.showType == 'key-value') {
       str += config.info
-        .map((dataName: string) => `${dataName} : ${data[dataName]}`)
+        .map((dataName: string) => {
+          const value = data[dataName]
+          // 检查值是否存在且可转换为字符串
+          const displayValue = value !== null && value !== undefined ? String(value) : ''
+          return `${dataName} : ${displayValue}`
+        })
         .join('\n')
     }
   }
