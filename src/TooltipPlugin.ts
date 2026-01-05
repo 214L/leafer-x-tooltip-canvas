@@ -79,18 +79,26 @@ export class TooltipPlugin {
   }
 
   /**
+   * @description 类型守卫: 判断实例是否为 App
+   * @private
+   */
+  private isAppInstance(instance: ILeafer | App): instance is App {
+    return instance.isApp === true
+  }
+
+  /**
    * @description 初始化状态
    */
   private initState() {
-    if (this.instance.isApp) {
-      const app = this.instance as App
-      if (app.sky === undefined) {
-        app.sky = app.addLeafer({
+    if (this.isAppInstance(this.instance)) {
+      // TypeScript 自动推断 this.instance 为 App 类型
+      if (this.instance.sky === undefined) {
+        this.instance.sky = this.instance.addLeafer({
           type: 'draw',
           usePartRender: false,
         })
       }
-      this.aimLeafer = app.sky
+      this.aimLeafer = this.instance.sky
     } else if (this.instance.isLeafer) {
       this.aimLeafer = this.instance
     } else {
