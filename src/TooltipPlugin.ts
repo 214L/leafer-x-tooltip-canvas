@@ -24,6 +24,12 @@ export class TooltipPlugin {
    */
   private readonly pointEventId: IEventListenerId
 
+  /**
+   * @param tooltipCache - Tooltip 实例缓存,避免重复 DOM 查询
+   * @private
+   */
+  private tooltipCache: Map<string, Tooltip> = new Map()
+
   constructor(instance: ILeafer | App, config?: IUserConfig) {
     this.instance = instance
     this.config = Object.assign({}, defaultConfig, config)
@@ -134,10 +140,21 @@ export class TooltipPlugin {
    * @description 隐藏 tooltip
    */
   private hideTooltip() {
-    const tooltipList = this.aimLeafer.find('Tooltip') as Tooltip[]
-    tooltipList.forEach((tooltip: Tooltip) => {
-      tooltip.hide()
+    // 使用缓存而不是 DOM 查询,提升性能
+    // 同时清理已销毁的实例
+    const invalidIds: string[] = []
+
+    this.tooltipCache.forEach((tooltip, id) => {
+      if (tooltip.parent) {
+        tooltip.hide()
+      } else {
+        // 标记无效的缓存条目
+        invalidIds.push(id)
+      }
     })
+
+    // 清理无效缓存
+    invalidIds.forEach(id => this.tooltipCache.delete(id))
   }
 
   /**
@@ -145,26 +162,33 @@ export class TooltipPlugin {
    */
   private handleTooltip(event: PointerEvent, target: ILeaf) {
     const id = getTooltipId(target)
-    const tooltipList = this.aimLeafer.find('Tooltip') as Tooltip[]
-    let processed = false
-    for (const tooltip of tooltipList) {
-      if (tooltip.id === id) {
-        tooltip.update({ x: event.x, y: event.y })
-        processed = true
-      } else {
+
+    // 隐藏其他 tooltip
+    this.tooltipCache.forEach((tooltip, cacheId) => {
+      if (cacheId !== id) {
         tooltip.hide()
       }
-    }
+    })
 
-    if (!processed) {
-      this.aimLeafer.add(
-        new Tooltip({
-          id,
-          pointerPos: { x: event.x, y: event.y },
-          target,
-          config: this.config,
-        })
-      )
+    // 检查缓存中的实例是否仍然有效(未被销毁)
+    const cachedTooltip = this.tooltipCache.get(id)
+    if (cachedTooltip && cachedTooltip.parent) {
+      // 实例有效,直接更新
+      cachedTooltip.update({ x: event.x, y: event.y })
+    } else {
+      // 实例已被销毁或不存在,移除无效缓存并创建新实例
+      if (cachedTooltip) {
+        this.tooltipCache.delete(id)
+      }
+
+      const tooltip = new Tooltip({
+        id,
+        pointerPos: { x: event.x, y: event.y },
+        target,
+        config: this.config,
+      })
+      this.aimLeafer.add(tooltip)
+      this.tooltipCache.set(id, tooltip)
     }
   }
 
@@ -175,13 +199,14 @@ export class TooltipPlugin {
     // 防止重复销毁
     if (!this.instance) return
 
-    const tooltipList = this.aimLeafer?.find('Tooltip') as Tooltip[]
-    if (tooltipList) {
-      tooltipList.forEach((tooltip) => {
+    // 清理缓存中的所有 tooltip
+    if (this.tooltipCache) {
+      this.tooltipCache.forEach((tooltip) => {
         tooltip.destroyTooltip()
         // 使用可选链,防止 parent 为 null/undefined
         tooltip.parent?.remove(tooltip)
       })
+      this.tooltipCache.clear()
     }
 
     // 确保事件被正确清理
