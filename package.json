@@ -53,7 +53,6 @@
     "vitest": "^0.34.4"
   },
   "dependencies": {
-    "@leafer-in/find": "^1.12.2",
     "@leafer-in/flow": "^1.12.2",
     "@leafer-ui/core": "^1.12.2",
     "leafer-ui": "^1.12.2"
