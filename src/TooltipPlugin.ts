@@ -40,10 +40,42 @@ export class TooltipPlugin {
 
   constructor(instance: ILeafer | App, config?: IUserConfig) {
     this.instance = instance
-    this.config = Object.assign({}, defaultConfig, config)
+    this.config = this.mergeConfig(defaultConfig, config)
     this.handleConfig()
     this.initState()
     this.pointEventId = this.initEvent()
+  }
+
+  /**
+   * @description 深度合并配置,避免实例间相互影响
+   * @private
+   */
+  private mergeConfig(base: IUserConfig, override?: IUserConfig): IUserConfig {
+    if (!override) {
+      // 深拷贝默认配置
+      return {
+        ...base,
+        style: { ...base.style },
+        includesType: [...(base.includesType || [])],
+        excludesType: [...(base.excludesType || [])],
+        ignoreType: [...(base.ignoreType || [])],
+        info: [...(base.info || [])],
+      }
+    }
+
+    // 深度合并用户配置
+    return {
+      ...base,
+      ...override,
+      style: {
+        ...base.style,
+        ...override.style,
+      },
+      includesType: override.includesType || base.includesType,
+      excludesType: override.excludesType || base.excludesType,
+      ignoreType: override.ignoreType || base.ignoreType,
+      info: override.info || base.info,
+    }
   }
 
   /**
