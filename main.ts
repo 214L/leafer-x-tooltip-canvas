@@ -2,6 +2,7 @@ import { App, Ellipse, Rect } from 'leafer-ui'
 
 import { TooltipPlugin } from './src' // 引入插件代码
 import { Flow } from '@leafer-in/flow'
+import "@leafer-in/find"
 const app = new App({ view: window, tree: {} })
 
 const rect1 = new Rect({
