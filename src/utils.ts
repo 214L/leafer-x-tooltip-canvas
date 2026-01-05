@@ -10,23 +10,42 @@ export const getTooltipId = function (target: ILeaf) {
   return target.tag + target.innerId
 }
 export const handleTextStyle = function (target: ILeaf, config: IUserConfig) {
+  // 参数校验
+  if (!target || !config) {
+    console.error('handleTextStyle: Invalid parameters')
+    return { width: 100, height: 30, text: '' }
+  }
+
   const str = handleContent(target, config)
   const { fontSize, fontFamily, fontWeight, padding } = config.style
-  const box = new Box({
-    children: [
-      {
-        tag: 'Text',
-        text: str,
-        fontSize,
-        fontFamily,
-        fontWeight,
-        padding,
-      },
-    ],
-  })
 
-  const { width, height } = box.getBounds()
-  return { width, height, text: str }
+  try {
+    const box = new Box({
+      children: [
+        {
+          tag: 'Text',
+          text: str,
+          fontSize,
+          fontFamily,
+          fontWeight,
+          padding,
+        },
+      ],
+    })
+
+    const bounds = box.getBounds()
+    // 检查 bounds 是否有效
+    if (!bounds || bounds.width === undefined || bounds.height === undefined) {
+      console.warn('handleTextStyle: Invalid bounds, using default size')
+      return { width: 100, height: 30, text: str }
+    }
+
+    const { width, height } = bounds
+    return { width, height, text: str }
+  } catch (error) {
+    console.error('handleTextStyle: Failed to calculate text size', error)
+    return { width: 100, height: 30, text: str }
+  }
 }
 
 function handleContent(target: ILeaf, config: IUserConfig) {
