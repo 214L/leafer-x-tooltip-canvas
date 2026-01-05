@@ -130,8 +130,7 @@ export class Tooltip extends Pen implements ITooltip {
     this.clearShowHideTimers()
     this.showTimerId = setTimeout(() => {
       this.createShapes(pos)
-      clearTimeout(this.showTimerId)
-      this.showTimerId = null
+      this.showTimerId = null  // 定时器执行完毕,清空引用
     }, this.config.showDelay)
   }
 
@@ -140,19 +139,21 @@ export class Tooltip extends Pen implements ITooltip {
     if (immediate) {
       this.destroy()
     } else {
-      if (!this.hideTimerId) {
-        this.hideTimerId = setTimeout(() => {
-          this.destroy()
-        }, this.config.hideDelay)
-      }
+      // 移除 if 判断,确保每次 hide() 都能正确设置定时器
+      this.hideTimerId = setTimeout(() => {
+        this.destroy()
+        this.hideTimerId = null
+      }, this.config.hideDelay)
     }
   }
 
   public update(pos: IPos) {
     this.clearShowHideTimers()
     if (this.isShow) {
+      // 已显示,立即更新位置
       this.createShapes(pos)
     } else {
+      // 未显示,启动 show 定时器
       this.show(pos)
     }
   }
