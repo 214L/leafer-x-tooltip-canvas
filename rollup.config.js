@@ -41,6 +41,7 @@ const plugins = [
   }),
   typescript({
     tsconfig: './tsconfig.json',
+    outDir: isDev ? 'dev' : 'dist',
   }),
   commonjs(),
 ]
