@@ -1,6 +1,12 @@
 import { Box } from 'leafer-ui'
 import { ILeaf } from '@leafer-ui/interface'
 import { IUserConfig } from './interface'
+
+/**
+ * @description 文本尺寸缓存,避免重复计算
+ */
+const textSizeCache = new Map<string, { width: number; height: number }>()
+
 /**
  * @description 获取uuid 考虑兼容性问题采用此方法
  * @param length id长度
@@ -9,6 +15,7 @@ import { IUserConfig } from './interface'
 export const getTooltipId = function (target: ILeaf) {
   return target.tag + target.innerId
 }
+
 export const handleTextStyle = function (target: ILeaf, config: IUserConfig) {
   // 参数校验
   if (!target || !config) {
@@ -18,6 +25,15 @@ export const handleTextStyle = function (target: ILeaf, config: IUserConfig) {
 
   const str = handleContent(target, config)
   const { fontSize, fontFamily, fontWeight, padding } = config.style
+
+  // 生成缓存 key,包含所有影响尺寸的因素
+  const cacheKey = `${str}:${fontSize}:${fontFamily}:${fontWeight}:${padding}`
+
+  // 检查缓存
+  if (textSizeCache.has(cacheKey)) {
+    const cached = textSizeCache.get(cacheKey)!
+    return { ...cached, text: str }
+  }
 
   try {
     const box = new Box({
@@ -41,6 +57,10 @@ export const handleTextStyle = function (target: ILeaf, config: IUserConfig) {
     }
 
     const { width, height } = bounds
+
+    // 存入缓存
+    textSizeCache.set(cacheKey, { width, height })
+
     return { width, height, text: str }
   } catch (error) {
     console.error('handleTextStyle: Failed to calculate text size', error)
