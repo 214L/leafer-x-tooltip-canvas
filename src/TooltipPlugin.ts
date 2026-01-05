@@ -181,20 +181,26 @@ export class TooltipPlugin {
    * @returns
    */
   private handleAllowed(target: ILeaf): boolean {
-    const infoArr = ['#' + target.id, '.' + target.className, target.tag]
+    const targetIdentifiers = ['#' + target.id, '.' + target.className, target.tag]
+
+    const hasIncludesRule = this.includesTypeSet.size > 0
+    const hasExcludesRule = this.excludesTypeSet.size > 0
 
     // 如果没有配置任何过滤规则,默认允许
-    if (this.includesTypeSet.size === 0 && this.excludesTypeSet.size === 0) {
+    if (!hasIncludesRule && !hasExcludesRule) {
       return true
     }
 
-    
-    const isInclude = infoArr.some((string) => this.includesTypeSet.has(string))
-    const isExclude = infoArr.some((string) => this.excludesTypeSet.has(string))
+    const matchesInclude = targetIdentifiers.some((id) => this.includesTypeSet.has(id))
+    const matchesExclude = targetIdentifiers.some((id) => this.excludesTypeSet.has(id))
 
-    if (!isExclude && this.includesTypeSet.size === 0) return true
-    if (!isInclude && this.excludesTypeSet.size === 0) return false
-    return isInclude || !isExclude
+    // includes 优先级高于 excludes
+    if (matchesInclude) return true  // 匹配白名单,直接允许(即使也在黑名单中)
+    if (matchesExclude) return false  // 不在白名单但在黑名单,拒绝
+
+    // 两者都不匹配的情况
+    if (hasIncludesRule) return false  // 有白名单规则但不匹配 → 拒绝
+    return true  // 只有黑名单规则且不匹配 → 允许
   }
 
   /**
