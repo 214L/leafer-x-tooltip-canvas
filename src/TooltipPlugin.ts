@@ -47,6 +47,8 @@ export class TooltipPlugin {
       this.aimLeafer = app.sky
     } else if (this.instance.isLeafer) {
       this.aimLeafer = this.instance
+    } else {
+      throw new Error('TooltipPlugin: Instance must be either App or Leafer')
     }
   }
 
