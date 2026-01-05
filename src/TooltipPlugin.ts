@@ -170,14 +170,23 @@ export class TooltipPlugin {
    * @description 销毁
    */
   public destroy() {
-    const tooltipList = this.aimLeafer.find('Tooltip') as Tooltip[]
+    // 防止重复销毁
+    if (!this.instance) return
+
+    const tooltipList = this.aimLeafer?.find('Tooltip') as Tooltip[]
     if (tooltipList) {
       tooltipList.forEach((tooltip) => {
         tooltip.destroyTooltip()
-        tooltip.parent.remove(tooltip)
+        // 使用可选链,防止 parent 为 null/undefined
+        tooltip.parent?.remove(tooltip)
       })
     }
-    this.instance.off_(this.pointEventId)
+
+    // 确保事件被正确清理
+    if (this.pointEventId) {
+      this.instance.off_(this.pointEventId)
+    }
+
     this.instance = null
     this.aimLeafer = null
   }
