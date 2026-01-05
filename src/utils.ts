@@ -51,12 +51,22 @@ export const handleTextStyle = function (target: ILeaf, config: IUserConfig) {
 function handleContent(target: ILeaf, config: IUserConfig) {
   let str = ''
   const data = target as { [key: string]: any }
-  
+
   // 如果formatter函数存在，则使用formatter函数进行格式化
-  if (config.formatter(data) !== undefined) {
-    str = config.formatter(data)
-  } else {
-    // 如果formatter函数不存在，则根据showType进行默认格式化
+  if (config.formatter && typeof config.formatter === 'function') {
+    try {
+      const formatted = config.formatter(data)
+      if (formatted !== undefined) {
+        str = formatted
+      }
+    } catch (error) {
+      console.error('handleContent: Formatter function error', error)
+      // formatter 失败时降级到默认格式化
+    }
+  }
+
+  // 如果formatter函数不存在或执行失败，则根据showType进行默认格式化
+  if (!str) {
     if (config.showType == 'value') {
       str += config.info
         .map((dataName: string) => `${data[dataName]}`)
@@ -67,5 +77,6 @@ function handleContent(target: ILeaf, config: IUserConfig) {
         .join('\n')
     }
   }
+
   return str
 }
