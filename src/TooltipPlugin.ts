@@ -30,6 +30,14 @@ export class TooltipPlugin {
    */
   private tooltipCache: Map<string, Tooltip> = new Map()
 
+  /**
+   * @param 类型过滤 Set 缓存,将数组转为 Set 提升查询性能 O(n) -> O(1)
+   * @private
+   */
+  private includesTypeSet: Set<string> = new Set()
+  private excludesTypeSet: Set<string> = new Set()
+  private ignoreTypeSet: Set<string> = new Set()
+
   constructor(instance: ILeafer | App, config?: IUserConfig) {
     this.instance = instance
     this.config = Object.assign({}, defaultConfig, config)
@@ -63,6 +71,11 @@ export class TooltipPlugin {
       this.config.style.backgroundColor = 'black'
       this.config.style.color = 'white'
     }
+
+    // 初始化类型过滤 Set,提升查询性能
+    this.includesTypeSet = new Set(this.config.includesType || [])
+    this.excludesTypeSet = new Set(this.config.excludesType || [])
+    this.ignoreTypeSet = new Set(this.config.ignoreType || [])
   }
 
   /**
@@ -100,12 +113,16 @@ export class TooltipPlugin {
     this.handleTooltip(event, target)
   }
   private filterTarget(list: ILeaf[]): ILeaf | null {
-    const { ignoreType, excludesType, throughExcludes } = this.config
-    const arr = throughExcludes ? ignoreType.concat(excludesType) : ignoreType
-    
+    const { throughExcludes } = this.config
+
     const pureResult = list.filter((item) => {
+      // 使用 Set.has() 代替 Array.includes(),性能提升
+      const shouldIgnore = this.ignoreTypeSet.has(item?.tag)
+      const shouldExclude = throughExcludes && this.excludesTypeSet.has(item?.tag)
+
       if (
-        arr.includes(item?.tag) ||
+        shouldIgnore ||
+        shouldExclude ||
         item?.parent?.tag === 'Tooltip' ||
         item?.className === 'leafer-x-tooltip'
       ) {
@@ -122,17 +139,20 @@ export class TooltipPlugin {
    * @param target 目标节点
    * @returns
    */
-  private handleAllowed(target: ILeaf) {
+  private handleAllowed(target: ILeaf): boolean {
     const infoArr = ['#' + target.id, '.' + target.className, target.tag]
-    const { includesType, excludesType } = this.config
 
-    if (includesType.length === 0 && excludesType.length === 0) return true
+    // 如果没有配置任何过滤规则,默认允许
+    if (this.includesTypeSet.size === 0 && this.excludesTypeSet.size === 0) {
+      return true
+    }
 
-    const isInclude = infoArr.some((string) => includesType.includes(string))
-    const isExclude = infoArr.some((string) => excludesType.includes(string))
+    
+    const isInclude = infoArr.some((string) => this.includesTypeSet.has(string))
+    const isExclude = infoArr.some((string) => this.excludesTypeSet.has(string))
 
-    if (!isExclude && includesType.length === 0) return true
-    if (!isInclude && excludesType.length === 0) return false
+    if (!isExclude && this.includesTypeSet.size === 0) return true
+    if (!isInclude && this.excludesTypeSet.size === 0) return false
     return isInclude || !isExclude
   }
 
