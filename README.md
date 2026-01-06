@@ -56,6 +56,12 @@ new TooltipPlugin(app, {
   </thead>
   <tbody>
     <tr>
+      <td>debug</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>开启调试模式，输出目标元素、父级、位置、尺寸、样式等信息</td>
+    </tr>
+    <tr>
       <td><a href="#显示信息">info</a></td>
       <td>Array&lt;string&gt;</td>
       <td>['tag']</td>

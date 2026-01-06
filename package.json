@@ -1,7 +1,7 @@
 {
   "name": "leafer-x-tooltip-canvas",
   "description": "A tooltip plugin for Leafer-ui.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "214L",
   "license": "MIT",
   "type": "module",

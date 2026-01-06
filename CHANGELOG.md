@@ -1,5 +1,12 @@
 # Changelog
 
+#### [1.0.3] - 2025-01-06
+
+##### 添加 / [Added]
+- 添加 `debug` 配置项，开启后输出目标元素、父级、位置、尺寸、样式等调试信息。/ Added `debug` config option to output target element, parent, position, size, style info for troubleshooting.
+
+---
+
 #### [1.0.2] - 2025-01-05
 
 ##### 修复 / [Fixed]

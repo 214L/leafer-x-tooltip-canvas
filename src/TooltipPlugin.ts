@@ -39,6 +39,16 @@ export class TooltipPlugin {
   private excludesTypeSet: Set<string> = new Set()
   private ignoreTypeSet: Set<string> = new Set()
 
+  /**
+   * @description Debug 日志输出
+   * @private
+   */
+  private log(...args: unknown[]) {
+    if (this.config.debug) {
+      console.log('[TooltipPlugin]', ...args)
+    }
+  }
+
   constructor(instance: ILeafer | App, config?: IUserConfig) {
     this.instance = instance
     this.config = this.mergeConfig(defaultConfig, config)
@@ -142,12 +152,14 @@ export class TooltipPlugin {
     )
 
     const target = this.filterTarget(result.throughPath.list)
+
     if (!target) {
       this.hideTooltip()
       return
     }
 
-    if (!this.handleAllowed(target)) {
+    const allowed = this.handleAllowed(target)
+    if (!allowed) {
       this.hideTooltip()
       return
     }
@@ -188,6 +200,7 @@ export class TooltipPlugin {
 
     // 如果没有配置任何过滤规则,默认允许
     if (!hasIncludesRule && !hasExcludesRule) {
+      this.log('allowed', { target: target.tag, result: true, reason: 'no rules' })
       return true
     }
 
@@ -195,11 +208,21 @@ export class TooltipPlugin {
     const matchesExclude = targetIdentifiers.some((id) => this.excludesTypeSet.has(id))
 
     // includes 优先级高于 excludes
-    if (matchesInclude) return true  // 匹配白名单,直接允许(即使也在黑名单中)
-    if (matchesExclude) return false  // 不在白名单但在黑名单,拒绝
+    if (matchesInclude) {
+      this.log('allowed', { target: target.tag, result: true, reason: 'matches include' })
+      return true  // 匹配白名单,直接允许(即使也在黑名单中)
+    }
+    if (matchesExclude) {
+      this.log('allowed', { target: target.tag, result: false, reason: 'matches exclude' })
+      return false  // 不在白名单但在黑名单,拒绝
+    }
 
     // 两者都不匹配的情况
-    if (hasIncludesRule) return false  // 有白名单规则但不匹配 → 拒绝
+    if (hasIncludesRule) {
+      this.log('allowed', { target: target.tag, result: false, reason: 'has include rule but not matched' })
+      return false  // 有白名单规则但不匹配 → 拒绝
+    }
+    this.log('allowed', { target: target.tag, result: true, reason: 'only exclude rule, not matched' })
     return true  // 只有黑名单规则且不匹配 → 允许
   }
 
@@ -241,6 +264,7 @@ export class TooltipPlugin {
     const cachedTooltip = this.tooltipCache.get(id)
     if (cachedTooltip && cachedTooltip.parent) {
       // 实例有效,直接更新
+      this.log('tooltip update', { id, x: event.x, y: event.y })
       cachedTooltip.update({ x: event.x, y: event.y })
     } else {
       // 实例已被销毁或不存在,移除无效缓存并创建新实例
@@ -248,6 +272,7 @@ export class TooltipPlugin {
         this.tooltipCache.delete(id)
       }
 
+      this.log('tooltip create', { id, x: event.x, y: event.y, target: target.tag })
       const tooltip = new Tooltip({
         id,
         pointerPos: { x: event.x, y: event.y },

@@ -1,5 +1,6 @@
 import { IUserConfig } from './interface'
 export const defaultConfig: IUserConfig = {
+  debug: false,
   reference: 'pointer',
   info: ['tag'],
   showType: 'value',

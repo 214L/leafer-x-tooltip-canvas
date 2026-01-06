@@ -71,6 +71,16 @@ export class Tooltip extends Pen implements ITooltip {
   }
 
   /**
+   * @description Debug 日志输出
+   * @private
+   */
+  private log(...args: unknown[]) {
+    if (this.config?.debug) {
+      console.log('[Tooltip]', ...args)
+    }
+  }
+
+  /**
    * @description tooltip
    * @param pos 位置信息
    */
@@ -88,6 +98,25 @@ export class Tooltip extends Pen implements ITooltip {
       fontFamily,
     } = this.config.style
     let offset = this.config.offset
+
+    this.log('createShapes', {
+      target: {
+        tag: this.target?.tag,
+        id: this.target?.id,
+        className: this.target?.className,
+        parent: {
+          tag: this.target?.parent?.tag,
+          id: this.target?.parent?.id,
+        },
+      },
+      pointer: pos,
+      offset,
+      renderPos: { x: pos.x + offset[0], y: pos.y + offset[1] },
+      size: { width, height },
+      style: { backgroundColor, stroke, color, padding, borderRadius, fontSize },
+      text,
+    })
+
     this.setStyle({
       fill: backgroundColor,
       stroke,
@@ -129,6 +158,7 @@ export class Tooltip extends Pen implements ITooltip {
 
   public show(pos = this.__.pointerPos) {
     this.clearShowHideTimers()
+    this.log('show', { pos, delay: this.config.showDelay, isShow: this.isShow })
     this.showTimerId = setTimeout(() => {
       this.createShapes(pos)
       this.showTimerId = null  // 定时器执行完毕,清空引用
@@ -137,6 +167,7 @@ export class Tooltip extends Pen implements ITooltip {
 
   public hide(immediate = false) {
     this.clearShowHideTimers()
+    this.log('hide', { immediate, delay: this.config.hideDelay, isShow: this.isShow })
     if (immediate) {
       this.destroy()
     } else {
@@ -150,6 +181,7 @@ export class Tooltip extends Pen implements ITooltip {
 
   public update(pos: IPos) {
     this.clearShowHideTimers()
+    this.log('update', { pos, isShow: this.isShow })
     if (this.isShow) {
       // 已显示,立即更新位置
       this.createShapes(pos)

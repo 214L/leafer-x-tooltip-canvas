@@ -56,6 +56,12 @@ The specific config options are as follows. Click on the field name to jump to [
   </thead>
   <tbody>
     <tr>
+      <td>debug</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>Enable debug mode to output target element, parent, position, size, style info</td>
+    </tr>
+    <tr>
       <td><a href="#display-information">info</a></td>
       <td>Array&lt;string&gt;</td>
       <td>['tag']</td>

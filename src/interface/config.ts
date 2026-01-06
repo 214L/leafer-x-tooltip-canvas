@@ -1,5 +1,6 @@
 import { IFontWeight } from '@leafer-ui/interface'
 interface IUserConfig {
+  debug?: boolean
   reference?: 'pointer' | 'element'
   showDelay?: number
   arrow?: boolean

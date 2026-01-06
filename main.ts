@@ -54,5 +54,5 @@ const flow = new Flow({
 })
 
 app.tree.add(flow)
-new TooltipPlugin(app, { excludesType: ['Ellipse'], throughExcludes: true })
+new TooltipPlugin(app, { excludesType: ['Ellipse'], throughExcludes: true,debug:true }) // 使用插件
 console.log(app)
